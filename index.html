@@ -10,9 +10,6 @@
   <meta name="apple-mobile-web-app-title" content="CutOS" />
   <meta name="theme-color" content="#09090b" />
 
-  <!-- Custom App Icon for iPhone Home Screen -->
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%2309090b'/><circle cx='90' cy='90' r='62' fill='none' stroke='%2310b981' stroke-width='14' stroke-dasharray='310 390' stroke-linecap='round'/><text x='50%' y='56%' dominant-baseline='middle' text-anchor='middle' font-size='56'>⚡</text></svg>" />
-
   <title>CutOS — iPhone Diet Assistant</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -51,11 +48,11 @@
     <div>
       <div class="flex items-center gap-2">
         <span class="text-xs font-semibold uppercase tracking-widest text-emerald-400">CutOS iPhone</span>
-        <span id="streakBadge" class="text-[11px] bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded-full font-medium">1d streak</span>
+        <span id="streakBadge" class="text-[11px] bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded-full font-medium">Active</span>
       </div>
-      <h1 id="currentDateLabel" class="text-xl font-bold tracking-tight">Today</h1>
+      <h1 id="currentDateLabel" class="text-xl font-bold tracking-tight">Today's Routine</h1>
     </div>
-    <button onclick="resetDay()" class="text-xs text-zinc-400 bg-zinc-800/80 active:bg-zinc-700 px-3 py-1.5 rounded-full">
+    <button id="resetBtn" class="text-xs text-zinc-400 bg-zinc-800/80 active:bg-zinc-700 px-3 py-1.5 rounded-full">
       Reset Day
     </button>
   </header>
@@ -69,7 +66,7 @@
       <span class="text-lg">🧠</span>
       <div>
         <p class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Live Assistant</p>
-        <p id="aiMessage" class="text-xs text-zinc-300 leading-relaxed mt-0.5"></p>
+        <p id="aiMessage" class="text-xs text-zinc-300 leading-relaxed mt-0.5">Loading assistant...</p>
       </div>
     </div>
   </div>
@@ -121,7 +118,7 @@
           <h2 class="font-bold text-base">Campus Chia Seed Bottle</h2>
           <p class="text-xs text-zinc-400">1 tbsp soaked chia seeds in 500ml water</p>
         </div>
-        <button id="chiaBtn" onclick="toggleChia()" class="px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 text-zinc-300">
+        <button id="chiaBtn" class="px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 text-zinc-300">
           Log (+60 kcal)
         </button>
       </div>
@@ -141,22 +138,22 @@
     <div class="ios-card rounded-3xl p-4">
       <h2 class="font-bold text-base mb-1">Tap to Log Drink & Timestamp</h2>
       <p class="text-xs text-zinc-400 mb-3">Tracks hidden sugar calories and late-night sleep impact</p>
-      <div class="grid grid-cols-2 gap-2">
-        <button onclick="logDrink('Black Coffee', 5, 0)" class="p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
-          <div class="text-sm font-bold">☕ Black Coffee</div>
-          <div class="text-[11px] text-emerald-400">5 kcal • Clean focus</div>
+      <div class="grid grid-cols-2 gap-2" id="drinkButtonsContainer">
+        <button data-drink="Black Coffee" data-kcal="5" data-pro="0" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
+          <div class="text-sm font-bold pointer-events-none">☕ Black Coffee</div>
+          <div class="text-[11px] text-emerald-400 pointer-events-none">5 kcal • Clean focus</div>
         </button>
-        <button onclick="logDrink('Room Milk Coffee', 40, 2)" class="p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
-          <div class="text-sm font-bold">🥛 Real Milk Coffee</div>
-          <div class="text-[11px] text-emerald-400">40 kcal • No sugar</div>
+        <button data-drink="Room Milk Coffee" data-kcal="40" data-pro="2" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
+          <div class="text-sm font-bold pointer-events-none">🥛 Real Milk Coffee</div>
+          <div class="text-[11px] text-emerald-400 pointer-events-none">40 kcal • No sugar</div>
         </button>
-        <button onclick="logDrink('Coffee-mate + Sugar', 95, 0)" class="p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
-          <div class="text-sm font-bold">🥄 Coffee-mate Mix</div>
-          <div class="text-[11px] text-amber-400">95 kcal • Sugar/Oil</div>
+        <button data-drink="Coffee-mate + Sugar" data-kcal="95" data-pro="0" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
+          <div class="text-sm font-bold pointer-events-none">🥄 Coffee-mate Mix</div>
+          <div class="text-[11px] text-amber-400 pointer-events-none">95 kcal • Sugar/Oil</div>
         </button>
-        <button onclick="logDrink('Campus Dudh Cha', 130, 2)" class="p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
-          <div class="text-sm font-bold">🧋 Campus Dudh Cha</div>
-          <div class="text-[11px] text-rose-400">130 kcal • Condensed milk</div>
+        <button data-drink="Campus Dudh Cha" data-kcal="130" data-pro="2" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
+          <div class="text-sm font-bold pointer-events-none">🧋 Campus Dudh Cha</div>
+          <div class="text-[11px] text-rose-400 pointer-events-none">130 kcal • Condensed milk</div>
         </button>
       </div>
     </div>
@@ -172,16 +169,16 @@
     <div class="ios-card w-full max-w-md rounded-t-3xl p-5 space-y-3 border-t border-zinc-700">
       <div class="flex justify-between items-center">
         <h3 id="modalTitle" class="font-bold text-base">Swap or Log Cheat Food</h3>
-        <button onclick="closeSwapModal()" class="text-xs text-zinc-400 px-2 py-1">Close</button>
+        <button id="closeModalBtn" class="text-xs text-zinc-400 px-2 py-1">Close</button>
       </div>
       <p class="text-xs text-zinc-400">Select what you ate instead—your remaining calories and night mess meal will automatically adjust:</p>
       <div id="presetList" class="grid grid-cols-2 gap-2 max-h-56 overflow-y-auto"></div>
       <div class="pt-2 border-t border-zinc-800">
         <p class="text-xs font-semibold mb-1.5 text-zinc-300">Or Custom Entry:</p>
         <div class="flex gap-2">
-          <input id="customName" type="text" placeholder="Food name" class="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs" />
-          <input id="customKcal" type="number" placeholder="kcal" class="w-20 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs" />
-          <button onclick="applyCustomSwap()" class="bg-emerald-500 text-black font-bold px-3 py-2 rounded-xl text-xs">Add</button>
+          <input id="customName" type="text" placeholder="Food name" class="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white" />
+          <input id="customKcal" type="number" placeholder="kcal" class="w-20 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white" />
+          <button id="addCustomBtn" class="bg-emerald-500 text-black font-bold px-3 py-2 rounded-xl text-xs">Add</button>
         </div>
       </div>
     </div>
@@ -189,15 +186,15 @@
 
   <!-- iOS Bottom Tab Bar -->
   <nav class="ios-tabbar fixed bottom-0 left-0 right-0 max-w-md mx-auto px-6 pt-2 flex justify-around items-center z-40">
-    <button onclick="switchTab('meals')" id="tab-meals" class="flex flex-col items-center gap-0.5 text-emerald-400">
+    <button data-tab="meals" class="nav-tab flex flex-col items-center gap-0.5 text-emerald-400">
       <span class="text-lg">🍱</span>
       <span class="text-[10px] font-semibold">Routine</span>
     </button>
-    <button onclick="switchTab('water')" id="tab-water" class="flex flex-col items-center gap-0.5 text-zinc-400">
+    <button data-tab="water" class="nav-tab flex flex-col items-center gap-0.5 text-zinc-400">
       <span class="text-lg">💧</span>
       <span class="text-[10px] font-semibold">Water & Chia</span>
     </button>
-    <button onclick="switchTab('caffeine')" id="tab-caffeine" class="flex flex-col items-center gap-0.5 text-zinc-400">
+    <button data-tab="caffeine" class="nav-tab flex flex-col items-center gap-0.5 text-zinc-400">
       <span class="text-lg">☕</span>
       <span class="text-[10px] font-semibold">Coffee & Cha</span>
     </button>
@@ -262,11 +259,14 @@
       }
     }
 
-    function toggleMealDone(idx) {
-      const day = ensureDay(activeDateKey);
-      const m = day.meals[idx];
-      m.status = m.status === 'done' ? 'pending' : 'done';
-      saveStore();
+    function switchTab(tabName) {
+      ['meals', 'water', 'caffeine'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.toggle('hidden', t !== tabName);
+      });
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        const isMatch = btn.getAttribute('data-tab') === tabName;
+        btn.className = `nav-tab flex flex-col items-center gap-0.5 ${isMatch ? 'text-emerald-400' : 'text-zinc-400'}`;
+      });
     }
 
     function openSwapModal(idx) {
@@ -291,56 +291,49 @@
       document.getElementById('swapModal').classList.remove('hidden');
     }
 
-    function applyCustomSwap() {
-      const name = document.getElementById('customName').value.trim();
-      const kcal = parseInt(document.getElementById('customKcal').value, 10);
-      if (!name || isNaN(kcal)) return;
-      const day = ensureDay(activeDateKey);
-      day.meals[activeSlotIndex].actualTitle = name;
-      day.meals[activeSlotIndex].actualKcal = kcal;
-      day.meals[activeSlotIndex].actualPro = Math.round(kcal * 0.04);
-      day.meals[activeSlotIndex].status = 'swapped';
-      document.getElementById('customName').value = '';
-      document.getElementById('customKcal').value = '';
-      closeSwapModal();
-      saveStore();
-    }
-
     function closeSwapModal() {
       document.getElementById('swapModal').classList.add('hidden');
     }
 
-    function toggleChia() {
+    function renderAll() {
+      renderDayStrip();
       const day = ensureDay(activeDateKey);
-      day.chia = !day.chia;
-      saveStore();
-    }
 
-    function logDrink(name, kcal, pro) {
-      const day = ensureDay(activeDateKey);
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      day.drinks.unshift({ name, kcal, pro, time: timeStr, hour: now.getHours() });
-      saveStore();
-    }
+      let kcal = day.chia ? 60 : 0;
+      let pro = day.chia ? 2 : 0;
 
-    function removeDrink(index) {
-      const day = ensureDay(activeDateKey);
-      day.drinks.splice(index, 1);
-      saveStore();
-    }
+      day.meals.forEach(m => {
+        if (m.status === 'done' || m.status === 'swapped') {
+          kcal += m.actualKcal;
+          pro += m.actualPro;
+        }
+      });
 
-    function resetDay() {
-      delete store[activeDateKey];
-      saveStore();
-    }
+      day.drinks.forEach(d => {
+        kcal += d.kcal;
+        pro += d.pro;
+      });
 
-    function switchTab(tab) {
-      ['meals', 'water', 'caffeine'].forEach(t => {
-        document.getElementById(`view-${t}`).classList.toggle('hidden', t !== tab); document.getElementById(`tab-${t}`).className = `flex flex-col items-center gap-0.5 ${t === tab ? 'text-emerald-400' : 'text-zinc-400'}`; }); }  function renderAll() { renderDayStrip(); const day = ensureDay(activeDateKey);  let kcal = day.chia ? 60 : 0; let pro = day.chia ? 2 : 0;  day.meals.forEach(m => { if (m.status === 'done' \vert{}\vert{} m.status === 'swapped') { kcal += m.actualKcal; pro += m.actualPro; } });  day.drinks.forEach(d => { kcal += d.kcal; pro += d.pro; });  const rem = TARGET_KCAL - kcal; document.getElementById('kcalConsumed').textContent = kcal; document.getElementById('kcalRemaining').textContent = rem >= 0 ? rem : `${Math.abs(rem)} over`;
+      const rem = TARGET_KCAL - kcal;
+      document.getElementById('kcalConsumed').textContent = kcal;
+      document.getElementById('kcalRemaining').textContent = rem >= 0 ? rem : `${Math.abs(rem)} over`;
       document.getElementById('kcalRemaining').className = `text-xl font-bold ${rem >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
-      document.getElementById('kcalBar').style.width = `${Math.min(100, (kcal / TARGET_KCAL) * 100)}\%`; document.getElementById('proTotal').textContent = `${pro}g`;
-      document.getElementById('waterSummary').textContent = `${(day.water * 0.25).toFixed(2)}L`; document.getElementById('caffeineSummary').textContent = day.drinks.length;  // Smart Assistant Logic const aiMsg = document.getElementById('aiMessage'); const hadCampusCheat = day.meals.some(m => m.status === 'swapped' && m.actualKcal >= 280); const dinnerSlot = day.meals[4];  if (day.meals[0].status === 'pending') { aiMsg.textContent = "Don't leave for campus on an empty stomach! Eat your Oats or 2 Eggs first so you don't crave peyaju & alur chop at 12 PM."; } else if (hadCampusCheat && dinnerSlot.status === 'pending') { aiMsg.textContent = "You logged heavier campus food earlier. Tap 'Swap' on Mess Dinner and pick 'No-Rice Mess Chicken + Dal + Yogurt (320 kcal)' to stay inside your fat-loss deficit!"; } else if (rem < 0) { aiMsg.textContent = `You're ${Math.abs(rem)} kcal over target today. Take a 20-minute evening walk and stick to black coffee tomorrow.`;
+      document.getElementById('kcalBar').style.width = `${Math.min(100, (kcal / TARGET_KCAL) * 100)}%`;
+      document.getElementById('proTotal').textContent = `${pro}g`;
+      document.getElementById('waterSummary').textContent = `${(day.water * 0.25).toFixed(2)}L`;
+      document.getElementById('caffeineSummary').textContent = day.drinks.length;
+
+      // Smart Assistant Logic
+      const aiMsg = document.getElementById('aiMessage');
+      const hadCampusCheat = day.meals.some(m => m.status === 'swapped' && m.actualKcal >= 280);
+      const dinnerSlot = day.meals[4];
+
+      if (day.meals[0].status === 'pending') {
+        aiMsg.textContent = "Don't leave for campus on an empty stomach! Eat your Oats or 2 Eggs first so you don't crave peyaju & alur chop at 12 PM.";
+      } else if (hadCampusCheat && dinnerSlot.status === 'pending') {
+        aiMsg.textContent = "You logged heavier campus food earlier. Tap 'Swap' on Mess Dinner and pick 'No-Rice Mess Chicken + Dal + Yogurt (320 kcal)' to stay inside your deficit!";
+      } else if (rem < 0) {
+        aiMsg.textContent = `You're ${Math.abs(rem)} kcal over target today. Take a 20-minute evening walk and stick to black coffee tomorrow.`;
       } else {
         aiMsg.textContent = `Right on track with ${rem} kcal remaining. Keep sipping water between lectures.`;
       }
@@ -354,4 +347,134 @@
         card.className = `ios-card rounded-2xl p-3.5 transition-all ${isLogged ? 'border-emerald-500/40 bg-emerald-950/10' : ''}`;
         card.innerHTML = `
           <div class="flex justify-between items-start mb-1.5">
-            <span class="text-[11px] font-semibold text-zinc-400">${
+            <span class="text-[11px] font-semibold text-zinc-400">${m.time}</span>
+            <span class="text-xs font-bold ${m.status === 'swapped' ? 'text-amber-400' : 'text-emerald-400'}">${m.actualKcal} kcal • ${m.actualPro}g P</span>
+          </div>
+          <p class="text-sm font-semibold text-zinc-100 mb-3">${m.actualTitle}</p>
+          <div class="flex gap-2">
+            <button data-action="toggle" data-index="${idx}" class="flex-1 py-2 rounded-xl text-xs font-bold ${isLogged ? 'bg-emerald-500 text-black' : 'bg-zinc-800 text-zinc-200'}">
+              ${isLogged ? '✓ Logged' : '✓ Ate Planned'}
+            </button>
+            <button data-action="swap" data-index="${idx}" class="px-3 py-2 rounded-xl text-xs font-semibold bg-zinc-900 border border-zinc-700 text-zinc-300">
+              ⇄ Swap / Cheat
+            </button>
+          </div>
+        `;
+        mc.appendChild(card);
+      });
+
+      // Render Water
+      const chiaBtn = document.getElementById('chiaBtn');
+      chiaBtn.textContent = day.chia ? '✓ Logged (60 kcal)' : 'Log (+60 kcal)';
+      chiaBtn.className = `px-4 py-2 rounded-xl text-xs font-bold ${day.chia ? 'bg-emerald-500 text-black' : 'bg-zinc-800 text-zinc-300'}`;
+      document.getElementById('waterCountLabel').textContent = `${day.water} / 10 glasses`;
+
+      const wg = document.getElementById('waterGrid');
+      wg.innerHTML = '';
+      for (let i = 1; i <= 10; i++) {
+        const filled = i <= day.water;
+        const b = document.createElement('button');
+        b.className = `h-12 rounded-2xl font-bold text-xs flex flex-col items-center justify-center border ${filled ? 'bg-sky-500/20 border-sky-400 text-sky-300' : 'bg-zinc-900 border-zinc-800 text-zinc-500'}`;
+        b.innerHTML = `<span>💧</span><span>${i * 250}</span>`;
+        b.onclick = () => { day.water = (day.water === i) ? i - 1 : i; saveStore(); };
+        wg.appendChild(b);
+      }
+
+      // Render Drinks
+      const dt = document.getElementById('drinkTimeline');
+      if (day.drinks.length === 0) {
+        dt.innerHTML = `<p class="text-zinc-500 py-2">No coffee or cha logged today.</p>`;
+      } else {
+        dt.innerHTML = day.drinks.map((d, i) => `
+          <div class="flex justify-between items-center bg-zinc-900/90 px-3 py-2 rounded-xl">
+            <div>
+              <span class="font-semibold text-zinc-200">${d.name}</span>
+              <span class="text-zinc-500 ml-1.5">${d.time}</span>
+              ${d.hour >= 18 ? '<span class="ml-1 text-[10px] text-amber-400">(Late caffeine)</span>' : ''}
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-400 font-semibold">+${d.kcal} kcal</span>
+              <button data-drink-remove="${i}" class="text-zinc-500 px-1">✕</button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Global Event Delegation for Dynamic Buttons
+    document.addEventListener('click', (e) => {
+      const target = e.target;
+
+      // Meal Action Buttons
+      if (target.matches('[data-action="toggle"]')) {
+        const idx = parseInt(target.getAttribute('data-index'), 10);
+        const day = ensureDay(activeDateKey);
+        const m = day.meals[idx];
+        m.status = m.status === 'done' ? 'pending' : 'done';
+        saveStore();
+      }
+      if (target.matches('[data-action="swap"]')) {
+        const idx = parseInt(target.getAttribute('data-index'), 10);
+        openSwapModal(idx);
+      }
+
+      // Drink Remove Buttons
+      if (target.hasAttribute('data-drink-remove')) {
+        const idx = parseInt(target.getAttribute('data-drink-remove'), 10);
+        const day = ensureDay(activeDateKey);
+        day.drinks.splice(idx, 1);
+        saveStore();
+      }
+    });
+
+    // Static Event Listeners
+    document.querySelectorAll('.nav-tab').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
+    });
+
+    document.querySelectorAll('.drink-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name = btn.getAttribute('data-drink');
+        const kcal = parseInt(btn.getAttribute('data-kcal'), 10);
+        const pro = parseInt(btn.getAttribute('data-pro'), 10);
+        const day = ensureDay(activeDateKey);
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        day.drinks.unshift({ name, kcal, pro, time: timeStr, hour: now.getHours() });
+        saveStore();
+      });
+    });
+
+    document.getElementById('chiaBtn').addEventListener('click', () => {
+      const day = ensureDay(activeDateKey);
+      day.chia = !day.chia;
+      saveStore();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      delete store[activeDateKey];
+      saveStore();
+    });
+
+    document.getElementById('closeModalBtn').addEventListener('click', closeSwapModal);
+
+    document.getElementById('addCustomBtn').addEventListener('click', () => {
+      const name = document.getElementById('customName').value.trim();
+      const kcal = parseInt(document.getElementById('customKcal').value, 10);
+      if (!name || isNaN(kcal)) return;
+      const day = ensureDay(activeDateKey);
+      day.meals[activeSlotIndex].actualTitle = name;
+      day.meals[activeSlotIndex].actualKcal = kcal;
+      day.meals[activeSlotIndex].actualPro = Math.round(kcal * 0.04);
+      day.meals[activeSlotIndex].status = 'swapped';
+      document.getElementById('customName').value = '';
+      document.getElementById('customKcal').value = '';
+      closeSwapModal();
+      saveStore();
+    });
+
+    // Initial Render
+    renderAll();
+  </script>
+</body>
+</html>

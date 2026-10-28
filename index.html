@@ -7,10 +7,13 @@
   <!-- iOS Standalone App Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="CutOS Master" />
-  <meta name="theme-color" content="#09090b" />
+  <meta name="apple-mobile-web-app-title" content="CutOS" />
+  <meta name="theme-color" content="#000000" />
 
-  <title>CutOS Master — Strict Diet Trainer</title>
+  <!-- Gorgeous iOS Home Screen Icon -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23000000'/><circle cx='90' cy='90' r='64' fill='none' stroke='%23f43f5e' stroke-width='12'/><path d='M90 45v45l30 30' fill='none' stroke='%23f43f5e' stroke-width='12' stroke-linecap='round'/></svg>" />
+
+  <title>CutOS Master — Strict Trainer</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
@@ -18,26 +21,33 @@
       --sab: env(safe-area-inset-bottom, 20px);
     }
     body {
-      background-color: #09090b;
-      color: #fafafa;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      background-color: #000000;
+      color: #f4f4f5;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
-      padding-top: calc(var(--sat) + 12px);
-      padding-bottom: calc(var(--sab) + 92px);
+      padding-top: calc(var(--sat) + 8px);
+      padding-bottom: calc(var(--sab) + 96px);
+      letter-spacing: -0.01em;
     }
     .ios-card {
-      background: rgba(24, 24, 27, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(24, 24, 27, 0.75);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
     .ios-tabbar {
-      background: rgba(15, 15, 18, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(18, 18, 20, 0.82);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       padding-bottom: calc(var(--sab) + 6px);
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
   </style>
 </head>
@@ -47,12 +57,12 @@
   <header class="flex items-center justify-between mb-4">
     <div>
       <div class="flex items-center gap-2">
-        <span class="text-xs font-semibold uppercase tracking-widest text-rose-400">CutOS Master Trainer</span>
-        <span id="streakBadge" class="text-[11px] bg-rose-500/15 text-rose-300 px-2 py-0.5 rounded-full font-medium">Strict Mode</span>
+        <span class="text-[11px] font-bold uppercase tracking-widest text-rose-500">CutOS Master</span>
+        <span class="text-[10px] bg-rose-500/15 text-rose-400 px-2.5 py-0.5 rounded-full font-semibold">Strict Trainer</span>
       </div>
-      <h1 id="currentDateLabel" class="text-xl font-bold tracking-tight">Today's Routine</h1>
+      <h1 class="text-2xl font-bold tracking-tight text-white mt-0.5">Daily Discipline</h1>
     </div>
-    <button id="resetBtn" class="text-xs text-zinc-400 bg-zinc-800/80 active:bg-zinc-700 px-3 py-1.5 rounded-full">
+    <button id="resetBtn" class="text-xs font-medium text-zinc-400 bg-zinc-900 active:bg-zinc-800 border border-zinc-800 px-3 py-1.5 rounded-full">
       Reset Day
     </button>
   </header>
@@ -61,64 +71,80 @@
   <div id="dayStrip" class="grid grid-cols-7 gap-1.5 mb-4"></div>
 
   <!-- Strict Master Trainer AI Banner -->
-  <div id="aiBanner" class="ios-card rounded-2xl p-3.5 mb-4 border-l-4 border-l-rose-500 bg-rose-950/20">
-    <div class="flex items-start gap-2.5">
-      <span class="text-lg">🚨</span>
+  <div id="aiBanner" class="ios-card rounded-2xl p-4 mb-4 border-l-4 border-l-rose-500 bg-gradient-to-r from-rose-950/30 to-zinc-900/40">
+    <div class="flex items-start gap-3">
+      <span class="text-xl">🚨</span>
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-rose-400">Master Trainer Warning</p>
-        <p id="aiMessage" class="text-xs text-zinc-200 leading-relaxed mt-0.5">Analyzing your timeline and habits...</p>
+        <p class="text-[11px] font-bold uppercase tracking-wider text-rose-400">Trainer Watchdog</p>
+        <p id="aiMessage" class="text-xs text-zinc-300 leading-relaxed mt-0.5">Initializing discipline checks...</p>
       </div>
     </div>
   </div>
 
   <!-- Calorie & Macro Dashboard -->
-  <div class="ios-card rounded-3xl p-4 mb-5">
+  <div class="ios-card rounded-3xl p-5 mb-5">
     <div class="flex items-center justify-between mb-3">
       <div>
-        <span class="text-xs text-zinc-400">Consumed / 1,650 kcal Target</span>
+        <span class="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Consumed / Target</span>
         <div class="flex items-baseline gap-1.5 mt-0.5">
-          <span id="kcalConsumed" class="text-3xl font-extrabold tracking-tight">0</span>
-          <span class="text-xs text-zinc-400">kcal</span>
+          <span id="kcalConsumed" class="text-3xl font-extrabold tracking-tight text-white">0</span>
+          <span class="text-xs text-zinc-500">/ 1,650 kcal</span>
         </div>
       </div>
       <div class="text-right">
-        <span class="text-xs text-zinc-400">Remaining</span>
+        <span class="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Remaining</span>
         <div id="kcalRemaining" class="text-xl font-bold text-emerald-400">1,650</div>
       </div>
     </div>
-    <div class="w-full h-2.5 bg-zinc-800 rounded-full overflow-hidden mb-3">
-      <div id="kcalBar" class="h-full bg-emerald-500 transition-all duration-300" style="width: 0%"></div>
+    <div class="w-full h-2 bg-zinc-900 rounded-full overflow-hidden mb-3.5 border border-zinc-800">
+      <div id="kcalBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300" style="width: 0%"></div>
     </div>
     <div class="grid grid-cols-3 gap-2 text-center text-xs">
-      <div class="bg-zinc-900/80 rounded-xl py-2">
-        <span class="text-zinc-400 block text-[10px]">PROTEIN</span>
-        <span id="proTotal" class="font-bold text-emerald-300">0g</span> <span class="text-zinc-500">/ 105g</span>
+      <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl py-2.5">
+        <span class="text-zinc-500 block text-[10px] font-semibold tracking-wider">PROTEIN</span>
+        <span id="proTotal" class="font-bold text-emerald-300">0g</span> <span class="text-zinc-600 text-[10px]">/105g</span>
       </div>
-      <div class="bg-zinc-900/80 rounded-xl py-2">
-        <span class="text-zinc-400 block text-[10px]">WATER</span>
-        <span id="waterSummary" class="font-bold text-sky-400">0.0L</span> <span class="text-zinc-500">/ 2.5L</span>
+      <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl py-2.5">
+        <span class="text-zinc-500 block text-[10px] font-semibold tracking-wider">WATER</span>
+        <span id="waterSummary" class="font-bold text-sky-400">0.0L</span> <span class="text-zinc-600 text-[10px]">/2.5L</span>
       </div>
-      <div class="bg-zinc-900/80 rounded-xl py-2">
-        <span class="text-zinc-400 block text-[10px]">CAFFEINE</span>
-        <span id="caffeineSummary" class="font-bold text-amber-400">0</span> <span class="text-zinc-500">cups</span>
+      <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-2xl py-2.5">
+        <span class="text-zinc-500 block text-[10px] font-semibold tracking-wider">CAFFEINE</span>
+        <span id="caffeineSummary" class="font-bold text-amber-400">0</span> <span class="text-zinc-600 text-[10px]">cups</span>
       </div>
     </div>
   </div>
 
   <!-- TAB 1: MEALS VIEW -->
-  <section id="view-meals" class="space-y-3">
+  <section id="view-meals" class="space-y-4">
+    
+    <!-- Quick Add Box -->
+    <div class="ios-card rounded-3xl p-4 border-amber-500/30 bg-gradient-to-b from-amber-950/10 to-zinc-900/50">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="text-base">🍰</span>
+        <h2 class="text-sm font-bold text-amber-400">Quick Add Unplanned Food</h2>
+      </div>
+      <p class="text-[11px] text-zinc-400 mb-3">Ate cake, street food, or snacks? Type it here for instant calorie estimation.</p>
+      <div class="flex gap-2">
+        <input id="quickFoodInput" type="text" placeholder="e.g. chocolate cake, burger, singara" class="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500" />
+        <button id="quickAddBtn" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-4 py-2.5 rounded-xl text-xs transition-all active:scale-95">
+          Estimate & Add
+        </button>
+      </div>
+    </div>
+
     <div id="mealsContainer" class="space-y-3"></div>
   </section>
 
   <!-- TAB 2: WATER & CHIA VIEW -->
   <section id="view-water" class="hidden space-y-4">
     <div class="ios-card rounded-3xl p-4">
-      <div class="flex justify-between items-center mb-3">
+      <div class="flex justify-between items-center">
         <div>
-          <h2 class="font-bold text-base">Campus Chia Seed Bottle</h2>
-          <p class="text-xs text-zinc-400">1 tbsp soaked chia seeds in 500ml water</p>
+          <h2 class="font-bold text-sm text-white">Campus Chia Seed Bottle</h2>
+          <p class="text-[11px] text-zinc-400 mt-0.5">1 tbsp soaked chia in 500ml water</p>
         </div>
-        <button id="chiaBtn" class="px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 text-zinc-300">
+        <button id="chiaBtn" class="px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 text-zinc-300 border border-zinc-700">
           Log (+60 kcal)
         </button>
       </div>
@@ -126,7 +152,7 @@
 
     <div class="ios-card rounded-3xl p-4">
       <div class="flex justify-between items-center mb-3">
-        <h2 class="font-bold text-base">Daily Hydration (250ml / glass)</h2>
+        <h2 class="font-bold text-sm text-white">Daily Hydration (250ml / glass)</h2>
         <span id="waterCountLabel" class="text-xs font-semibold text-sky-400">0 / 10 glasses</span>
       </div>
       <div id="waterGrid" class="grid grid-cols-5 gap-2.5"></div>
@@ -136,81 +162,70 @@
   <!-- TAB 3: COFFEE & CHA VIEW -->
   <section id="view-caffeine" class="hidden space-y-4">
     <div class="ios-card rounded-3xl p-4">
-      <h2 class="font-bold text-base mb-1">Tap to Log Drink & Timestamp</h2>
-      <p class="text-xs text-zinc-400 mb-3">Trainer locks coffee after 6:00 PM to protect sleep & fat loss</p>
+      <h2 class="font-bold text-sm text-white mb-1">Caffeine Timestamp Guardrail</h2>
+      <p class="text-[11px] text-zinc-400 mb-3">Trainer locks coffee after 6:00 PM to protect deep sleep & fat loss</p>
       <div class="grid grid-cols-2 gap-2" id="drinkButtonsContainer">
-        <button data-drink="Black Coffee" data-kcal="5" data-pro="0" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
-          <div class="text-sm font-bold pointer-events-none">☕ Black Coffee</div>
-          <div class="text-[11px] text-emerald-400 pointer-events-none">5 kcal • Clean focus</div>
+        <button data-drink="Black Coffee" data-kcal="5" data-pro="0" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800/80">
+          <div class="text-xs font-bold text-white pointer-events-none">☕ Black Coffee</div>
+          <div class="text-[10px] text-emerald-400 mt-0.5 pointer-events-none">5 kcal • Clean focus</div>
         </button>
-        <button data-drink="Room Milk Coffee" data-kcal="40" data-pro="2" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
-          <div class="text-sm font-bold pointer-events-none">🥛 Real Milk Coffee</div>
-          <div class="text-[11px] text-emerald-400 pointer-events-none">40 kcal • No sugar</div>
+        <button data-drink="Room Milk Coffee" data-kcal="40" data-pro="2" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800/80">
+          <div class="text-xs font-bold text-white pointer-events-none">🥛 Real Milk Coffee</div>
+          <div class="text-[10px] text-emerald-400 mt-0.5 pointer-events-none">40 kcal • No sugar</div>
         </button>
-        <button data-drink="Coffee-mate + Sugar" data-kcal="95" data-pro="0" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
-          <div class="text-sm font-bold pointer-events-none">🥄 Coffee-mate Mix</div>
-          <div class="text-[11px] text-amber-400 pointer-events-none">95 kcal • Sugar/Oil</div>
+        <button data-drink="Coffee-mate + Sugar" data-kcal="95" data-pro="0" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800/80">
+          <div class="text-xs font-bold text-white pointer-events-none">🥄 Coffee-mate Mix</div>
+          <div class="text-[10px] text-amber-400 mt-0.5 pointer-events-none">95 kcal • Sugar/Oil</div>
         </button>
-        <button data-drink="Campus Dudh Cha" data-kcal="130" data-pro="2" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
-          <div class="text-sm font-bold pointer-events-none">🧋 Campus Dudh Cha</div>
-          <div class="text-[11px] text-rose-400 pointer-events-none">130 kcal • Condensed milk</div>
+        <button data-drink="Campus Dudh Cha" data-kcal="130" data-pro="2" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800/80">
+          <div class="text-xs font-bold text-white pointer-events-none">🧋 Campus Dudh Cha</div>
+          <div class="text-[10px] text-rose-400 mt-0.5 pointer-events-none">130 kcal • Condensed milk</div>
         </button>
       </div>
     </div>
 
     <div class="ios-card rounded-3xl p-4">
-      <h3 class="font-bold text-sm mb-2.5">Today's Drink Timeline</h3>
+      <h3 class="font-bold text-xs uppercase tracking-wider text-zinc-400 mb-2.5">Today's Drink Timeline</h3>
       <div id="drinkTimeline" class="space-y-2 text-xs"></div>
     </div>
   </section>
 
-  <!-- Swap / Custom Extra Snack Modal -->
-  <div id="swapModal" class="fixed inset-0 bg-black/75 z-50 hidden flex items-end justify-center">
+  <!-- Swap Modal -->
+  <div id="swapModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-end justify-center">
     <div class="ios-card w-full max-w-md rounded-t-3xl p-5 space-y-3 border-t border-zinc-700 max-h-[85vh] overflow-y-auto">
       <div class="flex justify-between items-center">
-        <h3 id="modalTitle" class="font-bold text-base">Swap Slot or Add Extra Snack</h3>
-        <button id="closeModalBtn" class="text-xs text-zinc-400 px-2 py-1">Close</button>
+        <h3 id="modalTitle" class="font-bold text-sm text-white">Swap Slot</h3>
+        <button id="closeModalBtn" class="text-xs text-zinc-400 px-2 py-1 bg-zinc-900 rounded-lg">Close</button>
       </div>
-      
-      <!-- Custom Extra Entry (e.g. afternoon cake) -->
-      <div class="bg-zinc-900 p-3 rounded-2xl border border-zinc-800 space-y-2">
-        <p class="text-xs font-bold text-emerald-400">🍰 Ate Something Extra (Cake, Burger, Sweets)?</p>
-        <div class="flex gap-2">
-          <input id="customName" type="text" placeholder="e.g. Chocolate Cake / Pastry" class="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white" />
-          <input id="customKcal" type="number" placeholder="kcal" class="w-20 bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white" />
-          <button id="addCustomBtn" class="bg-emerald-500 text-black font-bold px-3 py-2 rounded-xl text-xs">Add</button>
-        </div>
-      </div>
-
-      <p class="text-xs text-zinc-400 pt-1">Or select a preset swap:</p>
+      <p class="text-xs text-zinc-400">Select preset substitution:</p>
       <div id="presetList" class="grid grid-cols-2 gap-2"></div>
     </div>
   </div>
 
   <!-- iOS Bottom Tab Bar -->
   <nav class="ios-tabbar fixed bottom-0 left-0 right-0 max-w-md mx-auto px-6 pt-2 flex justify-around items-center z-40">
-    <button data-tab="meals" class="nav-tab flex flex-col items-center gap-0.5 text-emerald-400">
+    <button data-tab="meals" class="nav-tab flex flex-col items-center gap-0.5 text-rose-500">
       <span class="text-lg">🍱</span>
-      <span class="text-[10px] font-semibold">Routine</span>
+      <span class="text-[10px] font-semibold tracking-tight">Routine</span>
     </button>
-    <button data-tab="water" class="nav-tab flex flex-col items-center gap-0.5 text-zinc-400">
+    <button data-tab="water" class="nav-tab flex flex-col items-center gap-0.5 text-zinc-500">
       <span class="text-lg">💧</span>
-      <span class="text-[10px] font-semibold">Water & Chia</span>
+      <span class="text-[10px] font-semibold tracking-tight">Water & Chia</span>
     </button>
-    <button data-tab="caffeine" class="nav-tab flex flex-col items-center gap-0.5 text-zinc-400">
+    <button data-tab="caffeine" class="nav-tab flex flex-col items-center gap-0.5 text-zinc-500">
       <span class="text-lg">☕</span>
-      <span class="text-[10px] font-semibold">Coffee & Cha</span>
+      <span class="text-[10px] font-semibold tracking-tight">Coffee & Cha</span>
     </button>
   </nav>
 
   <script>
     const TARGET_KCAL = 1650;
     const DEFAULT_SLOTS = [
-      { id: 'breakfast', time: '8:00 AM • Before Uni', title: 'Oats + Milk + Yogurt + 1 Egg (or 2 Eggs + 2 Bread)', kcal: 380, pro: 21, hourLimit: 11 },
-      { id: 'snack1', time: '11:30 AM • Campus Break', title: '1 Large Guava with Bit Lobon', kcal: 70, pro: 2, hourLimit: 14 },
-      { id: 'lunch', time: '2:00 PM • Mess Lunch', title: '1.25 Cup Rice + Mess Egg Curry + 1 Extra Boiled Egg + Dal', kcal: 520, pro: 26, hourLimit: 16 },
-      { id: 'snack2', time: '5:30 PM • Evening Fuel', title: '1 Boiled Egg + 3 tbsp Sour Aarong Yogurt', kcal: 145, pro: 11, hourLimit: 20 },
-      { id: 'dinner', time: '9:00 PM • Mess Dinner', title: '1 Cup Rice + Mess Chicken Curry + Dal + Yogurt', kcal: 535, pro: 35, hourLimit: 22 }
+      { id: 'breakfast', time: '8:00 AM • Before Uni', title: 'Oats + Milk + Yogurt + 1 Egg (or 2 Eggs + 2 Bread)', kcal: 380, pro: 21 },
+      { id: 'snack1', time: '11:30 AM • Campus Break', title: '1 Large Guava with Bit Lobon', kcal: 70, pro: 2 },
+      { id: 'lunch', time: '2:00 PM • Mess Lunch', title: '1.25 Cup Rice + Mess Egg Curry + 1 Extra Boiled Egg + Dal', kcal: 520, pro: 26 },
+      { id: 'snack2', time: '5:30 PM • Evening Fuel', title: '1 Boiled Egg + 3 tbsp Sour Aarong Yogurt', kcal: 145, pro: 11 },
+      { id: 'dinner', time: '9:00 PM • Mess Dinner', title: '1 Cup Rice + Mess Chicken Curry + Dal + Yogurt', kcal: 535, pro: 35 }
     ];
 
     const SWAP_PRESETS = [
@@ -225,7 +240,7 @@
 
     let activeDateKey = new Date().toISOString().slice(0, 10);
     let activeSlotIndex = null;
-    let store = JSON.parse(localStorage.getItem('cutos_master_v1') || '{}');
+    let store = JSON.parse(localStorage.getItem('cutos_master_v3') || '{}');
 
     function ensureDay(dateKey) {
       if (!store[dateKey]) {
@@ -234,14 +249,14 @@
           water: 0,
           chia: false,
           drinks: [],
-          extras: [] // Extra items like afternoon cake
+          extras: []
         };
       }
       return store[dateKey];
     }
 
     function saveStore() {
-      localStorage.setItem('cutos_master_v1', JSON.stringify(store));
+      localStorage.setItem('cutos_master_v3', JSON.stringify(store));
       renderAll();
     }
 
@@ -256,8 +271,8 @@
         const dayNum = d.getDate();
         const isSelected = key === activeDateKey;
         const btn = document.createElement('button');
-        btn.className = `py-2 rounded-2xl flex flex-col items-center text-xs ${isSelected ? 'bg-rose-500 text-white font-bold' : 'ios-card text-zinc-400'}`;
-        btn.innerHTML = `<span class="text-[10px]">${dayName}</span><span>${dayNum}</span>`;
+        btn.className = `py-2 rounded-2xl flex flex-col items-center text-xs transition-all ${isSelected ? 'bg-rose-500 text-white font-bold shadow-lg shadow-rose-500/25' : 'ios-card text-zinc-400'}`;
+        btn.innerHTML = `<span class="text-[9px] opacity-80 uppercase">${dayName}</span><span class="text-sm font-bold">${dayNum}</span>`;
         btn.onclick = () => { activeDateKey = key; renderAll(); };
         strip.appendChild(btn);
       }
@@ -269,7 +284,7 @@
       });
       document.querySelectorAll('.nav-tab').forEach(btn => {
         const isMatch = btn.getAttribute('data-tab') === tabName;
-        btn.className = `nav-tab flex flex-col items-center gap-0.5 ${isMatch ? 'text-rose-400' : 'text-zinc-400'}`;
+        btn.className = `nav-tab flex flex-col items-center gap-0.5 ${isMatch ? 'text-rose-500' : 'text-zinc-500'}`;
       });
     }
 
@@ -279,8 +294,8 @@
       list.innerHTML = '';
       SWAP_PRESETS.forEach(p => {
         const btn = document.createElement('button');
-        btn.className = 'p-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-left active:bg-zinc-900';
-        btn.innerHTML = `<div class="text-xs font-bold text-zinc-100">${p.name}</div><div class="text-[10px] text-emerald-400">${p.kcal} kcal • ${p.pro}g P</div>`;
+        btn.className = 'p-3 rounded-2xl bg-zinc-900/90 border border-zinc-800 text-left active:bg-zinc-800';
+        btn.innerHTML = `<div class="text-xs font-bold text-zinc-100">${p.name}</div><div class="text-[10px] text-emerald-400 mt-0.5 font-medium">${p.kcal} kcal • ${p.pro}g P</div>`;
         btn.onclick = () => {
           const day = ensureDay(activeDateKey);
           day.meals[activeSlotIndex].actualTitle = p.name;
@@ -300,11 +315,25 @@
       document.getElementById('swapModal').classList.add('hidden');
     }
 
+    function estimateFood(query) {
+      const q = query.toLowerCase();
+      if (q.includes('cake') || q.includes('pastry')) return { kcal: 380, pro: 5 };
+      if (q.includes('burger') || q.includes('fast food')) return { kcal: 520, pro: 22 };
+      if (q.includes('biryani') || q.includes('tehari')) return { kcal: 650, pro: 24 };
+      if (q.includes('singara') || q.includes('samosa')) return { kcal: 180, pro: 3 };
+      if (q.includes('peyaju') || q.includes('pakora')) return { kcal: 140, pro: 2 };
+      if (q.includes('alur chop') || q.includes('chop')) return { kcal: 160, pro: 3 };
+      if (q.includes('chocolate') || q.includes('sweet') || q.includes('misti')) return { kcal: 250, pro: 3 };
+      if (q.includes('chips') || q.includes('snacks')) return { kcal: 200, pro: 2 };
+      if (q.includes('rice') || q.includes('khichuri')) return { kcal: 450, pro: 10 };
+      if (q.includes('egg')) return { kcal: 100, pro: 7 };
+      return { kcal: 300, pro: 6 };
+    }
+
     function renderAll() {
       renderDayStrip();
       const day = ensureDay(activeDateKey);
       const nowHour = new Date().getHours();
-      const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
 
       let kcal = day.chia ? 60 : 0;
       let pro = day.chia ? 2 : 0;
@@ -337,78 +366,38 @@
       document.getElementById('waterSummary').textContent = `${(day.water * 0.25).toFixed(2)}L`;
       document.getElementById('caffeineSummary').textContent = day.drinks.length;
 
-      // 🚨 MASTER TRAINER WARNING LOGIC 🚨
       const aiMsg = document.getElementById('aiMessage');
-      const lunchMeal = day.meals[2]; // Lunch slot
-      const dinnerMeal = day.meals[4]; // Dinner slot
       let trainerWarning = "";
 
-      // Check if it's past 11:00 PM (23:00)
       if (nowHour >= 23) {
-        trainerWarning = "🛑 STRICT TRAINER LOCK: It is past 11:00 PM! Kitchen is permanently closed. Do NOT eat anything or drink coffee. Drink water only.";
-      } 
-      // Check if lunch was eaten too late (e.g., after 4:00 PM / 16:00)
-      else if (lunchMeal.status !== 'pending' && lunchMeal.loggedTime) {
-        // Simple heuristic check
-        trainerWarning = `⚠️ Master Alert: Lunch was logged at ${lunchMeal.loggedTime}. Eating lunch too late pushes your digestion and fat-burn window. Keep dinner light!`;
-      } 
-      // Check if dinner / late eating violation
-      else if (dinnerMeal.status !== 'pending' && nowHour >= 23) {
-        trainerWarning = "🛑 CRITICAL VIOLATION: Eating dinner or heavy meals at 11 PM or later destroys fat loss. No more food tonight!";
-      } 
-      // Check late caffeine
-      else if (day.drinks.some(d => d.hour >= 18)) {
-        trainerWarning = "⚠️ Caffeine Warning: You logged coffee/tea after 6:00 PM. This spikes cortisol and ruins deep sleep. Cut caffeine earlier tomorrow.";
-      } 
-      // Extra food warning (like cake)
-      else if (day.extras && day.extras.length > 0) {
-        trainerWarning = `⚠️ Extra Snack Logged (+${day.extras.reduce((a,b)=>a+b.kcal,0)} kcal): Your trainer adjusted your deficit. No fried street food or sweets for the rest of the week!`;
-      } 
-      else if (day.meals[0].status === 'pending' && nowHour >= 10) {
-        trainerWarning = "🚨 MORNING WARNING: You left for university on an empty stomach past 10 AM! This causes severe cravings for peyaju and alur chop later. Eat your oats or eggs right now.";
+        trainerWarning = "🛑 KITCHEN LOCKED: It is past 11:00 PM. No food or caffeine permitted. Protect your recovery.";
+      } else if (day.extras && day.extras.length > 0) {
+        trainerWarning = `⚠️ Extra Snack Logged (+${day.extras.reduce((a,b)=>a+b.kcal,0)} kcal): Deficit re-adjusted. Tighten discipline for the rest of the day.`;
+      } else if (day.drinks.some(d => d.hour >= 18)) {
+        trainerWarning = "⚠️ Late Caffeine Flag: Consumed after 6 PM. May negatively impact sleep quality.";
       } else {
-        trainerWarning = `Trainer Status: Clean discipline. ${rem} kcal remaining. Stay hydrated and avoid campus stalls!`;
+        trainerWarning = `Discipline Stable: ${rem} kcal remaining in budget. Maintain focus and bypass street stalls.`;
       }
 
       aiMsg.textContent = trainerWarning;
 
-      // Render Meals
       const mc = document.getElementById('mealsContainer');
       mc.innerHTML = '';
-      day.meals.forEach((m, idx) => {
-        const isLogged = m.status === 'done' || m.status === 'swapped';
-        const card = document.createElement('div');
-        card.className = `ios-card rounded-2xl p-3.5 transition-all ${isLogged ? 'border-emerald-500/40 bg-emerald-950/10' : ''}`;
-        card.innerHTML = `
-          <div class="flex justify-between items-start mb-1.5">
-            <span class="text-[11px] font-semibold text-zinc-400">${m.time} ${m.loggedTime ? '• logged at ' + m.loggedTime : ''}</span>
-            <span class="text-xs font-bold ${m.status === 'swapped' ? 'text-amber-400' : 'text-emerald-400'}">${m.actualKcal} kcal • ${m.actualPro}g P</span>
-          </div>
-          <p class="text-sm font-semibold text-zinc-100 mb-3">${m.actualTitle}</p>
-          <div class="flex gap-2">
-            <button data-action="toggle" data-index="${idx}" class="flex-1 py-2 rounded-xl text-xs font-bold ${isLogged ? 'bg-emerald-500 text-black' : 'bg-zinc-800 text-zinc-200'}">
-              ${isLogged ? '✓ Logged' : '✓ Ate Planned'}
-            </button>
-            <button data-action="swap" data-index="${idx}" class="px-3 py-2 rounded-xl text-xs font-semibold bg-zinc-900 border border-zinc-700 text-zinc-300">
-              ⇄ Swap / Custom Food
-            </button>
-          </div>
-        `;
-        mc.appendChild(card);
-      });
-
-      // Render Extras (Cake / Unplanned snacks) if any
+      
       if (day.extras && day.extras.length > 0) {
         const extraBox = document.createElement('div');
-        extraBox.className = 'ios-card rounded-2xl p-3.5 border-amber-500/40 bg-amber-950/10';
-        extraBox.innerHTML = `<h3 class="text-xs font-bold text-amber-400 mb-2">🍰 Unplanned Extra Items Logged Today:</h3>`;
+        extraBox.className = 'ios-card rounded-2xl p-4 border-amber-500/40 bg-amber-950/15 mb-3';
+        extraBox.innerHTML = `<h3 class="text-xs font-bold text-amber-400 mb-2.5">🍰 Unplanned Items Logged:</h3>`;
         day.extras.forEach((ex, exIdx) => {
           extraBox.innerHTML += `
-            <div class="flex justify-between items-center text-xs bg-zinc-900 px-3 py-2 rounded-xl mb-1.5">
-              <span>${ex.name} (${ex.time})</span>
-              <div class="flex items-center gap-2">
-                <span class="text-amber-400 font-semibold">+${ex.kcal} kcal</span>
-                <button data-extra-remove="${exIdx}" class="text-zinc-500 px-1">✕</button>
+            <div class="flex justify-between items-center text-xs bg-zinc-900/90 border border-zinc-800/80 px-3 py-2.5 rounded-xl mb-2">
+              <div>
+                <span class="font-bold text-white">${ex.name}</span>
+                <span class="text-zinc-500 ml-1.5 text-[11px]">${ex.time}</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <span class="text-amber-400 font-bold">+${ex.kcal} kcal (${ex.pro}g P)</span>
+                <button data-extra-remove="${exIdx}" class="text-zinc-500 hover:text-white px-1">✕</button>
               </div>
             </div>
           `;
@@ -416,10 +405,31 @@
         mc.appendChild(extraBox);
       }
 
-      // Render Water
+      day.meals.forEach((m, idx) => {
+        const isLogged = m.status === 'done' || m.status === 'swapped';
+        const card = document.createElement('div');
+        card.className = `ios-card rounded-2xl p-4 transition-all ${isLogged ? 'border-emerald-500/40 bg-emerald-950/15' : ''}`;
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-1.5">
+            <span class="text-[11px] font-medium text-zinc-400">${m.time} ${m.loggedTime ? '• ' + m.loggedTime : ''}</span>
+            <span class="text-xs font-bold ${m.status === 'swapped' ? 'text-amber-400' : 'text-emerald-400'}">${m.actualKcal} kcal • ${m.actualPro}g P</span>
+          </div>
+          <p class="text-sm font-semibold text-white mb-3.5 leading-snug">${m.actualTitle}</p>
+          <div class="flex gap-2">
+            <button data-action="toggle" data-index="${idx}" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${isLogged ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20' : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700/50'}">
+              ${isLogged ? '✓ Logged' : '✓ Ate Planned'}
+            </button>
+            <button data-action="swap" data-index="${idx}" class="px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-zinc-300">
+              ⇄ Swap Slot
+            </button>
+          </div>
+        `;
+        mc.appendChild(card);
+      });
+
       const chiaBtn = document.getElementById('chiaBtn');
       chiaBtn.textContent = day.chia ? '✓ Logged (60 kcal)' : 'Log (+60 kcal)';
-      chiaBtn.className = `px-4 py-2 rounded-xl text-xs font-bold ${day.chia ? 'bg-emerald-500 text-black' : 'bg-zinc-800 text-zinc-300'}`;
+      chiaBtn.className = `px-4 py-2 rounded-xl text-xs font-bold ${day.chia ? 'bg-emerald-500 text-black' : 'bg-zinc-800 text-zinc-300 border border-zinc-700'}`;
       document.getElementById('waterCountLabel').textContent = `${day.water} / 10 glasses`;
 
       const wg = document.getElementById('waterGrid');
@@ -427,38 +437,34 @@
       for (let i = 1; i <= 10; i++) {
         const filled = i <= day.water;
         const b = document.createElement('button');
-        b.className = `h-12 rounded-2xl font-bold text-xs flex flex-col items-center justify-center border ${filled ? 'bg-sky-500/20 border-sky-400 text-sky-300' : 'bg-zinc-900 border-zinc-800 text-zinc-500'}`;
-        b.innerHTML = `<span>💧</span><span>${i * 250}</span>`;
+        b.className = `h-12 rounded-2xl font-bold text-xs flex flex-col items-center justify-center border transition-all ${filled ? 'bg-sky-500/20 border-sky-400 text-sky-300 shadow-sm shadow-sky-500/20' : 'bg-zinc-900 border-zinc-800 text-zinc-500'}`;
+        b.innerHTML = `<span>💧</span><span class="text-[10px] mt-0.5">${i * 250}</span>`;
         b.onclick = () => { day.water = (day.water === i) ? i - 1 : i; saveStore(); };
         wg.appendChild(b);
       }
 
-      // Render Drinks
       const dt = document.getElementById('drinkTimeline');
       if (day.drinks.length === 0) {
-        dt.innerHTML = `<p class="text-zinc-500 py-2">No coffee or cha logged today.</p>`;
+        dt.innerHTML = `<p class="text-zinc-500 py-2 italic text-[11px]">No caffeine logged today.</p>`;
       } else {
         dt.innerHTML = day.drinks.map((d, i) => `
-          <div class="flex justify-between items-center bg-zinc-900/90 px-3 py-2 rounded-xl">
+          <div class="flex justify-between items-center bg-zinc-900/90 border border-zinc-800/80 px-3 py-2.5 rounded-xl">
             <div>
-              <span class="font-semibold text-zinc-200">${d.name}</span>
-              <span class="text-zinc-500 ml-1.5">${d.time}</span>
-              ${d.hour >= 18 ? '<span class="ml-1 text-[10px] text-rose-400 font-bold">(Late caffeine violation)</span>' : ''}
+              <span class="font-semibold text-white">${d.name}</span>
+              <span class="text-zinc-500 ml-1.5 text-[11px]">${d.time}</span>
+              ${d.hour >= 18 ? '<span class="ml-1.5 text-[10px] text-rose-400 font-bold">Late</span>' : ''}
             </div>
             <div class="flex items-center gap-2">
               <span class="text-emerald-400 font-semibold">+${d.kcal} kcal</span>
-              <button data-drink-remove="${i}" class="text-zinc-500 px-1">✕</button>
+              <button data-drink-remove="${i}" class="text-zinc-500 hover:text-white px-1">✕</button>
             </div>
           </div>
         `).join('');
       }
     }
 
-    // Global Event Delegation
     document.addEventListener('click', (e) => {
       const target = e.target;
-
-      // Meal Action Buttons
       if (target.matches('[data-action="toggle"]')) {
         const idx = parseInt(target.getAttribute('data-index'), 10);
         const day = ensureDay(activeDateKey);
@@ -476,16 +482,12 @@
         const idx = parseInt(target.getAttribute('data-index'), 10);
         openSwapModal(idx);
       }
-
-      // Drink Remove Buttons
       if (target.hasAttribute('data-drink-remove')) {
         const idx = parseInt(target.getAttribute('data-drink-remove'), 10);
         const day = ensureDay(activeDateKey);
         day.drinks.splice(idx, 1);
         saveStore();
       }
-
-      // Extra Snack Remove Buttons
       if (target.hasAttribute('data-extra-remove')) {
         const idx = parseInt(target.getAttribute('data-extra-remove'), 10);
         const day = ensureDay(activeDateKey);
@@ -494,7 +496,27 @@
       }
     });
 
-    // Static Event Listeners
+    document.getElementById('quickAddBtn').addEventListener('click', () => {
+      const input = document.getElementById('quickFoodInput');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const estimation = estimateFood(val);
+      const day = ensureDay(activeDateKey);
+      if (!day.extras) day.extras = [];
+      
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      day.extras.push({
+        name: val.charAt(0).toUpperCase() + val.slice(1),
+        kcal: estimation.kcal,
+        pro: estimation.pro,
+        time: timeStr
+      });
+
+      input.value = '';
+      saveStore();
+    });
+
     document.querySelectorAll('.nav-tab').forEach(btn => {
       btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
     });
@@ -503,7 +525,7 @@
       btn.addEventListener('click', () => {
         const nowHour = new Date().getHours();
         if (nowHour >= 23) {
-          alert("🛑 MASTER TRAINER LOCK: It is past 11 PM! Coffee is strictly prohibited right now.");
+          alert("🛑 KITCHEN LOCKED: It is past 11 PM! Caffeine is strictly prohibited.");
           return;
         }
         const name = btn.getAttribute('data-drink');
@@ -530,22 +552,6 @@
 
     document.getElementById('closeModalBtn').addEventListener('click', closeSwapModal);
 
-    // Custom Extra Item (e.g. afternoon cake)
-    document.getElementById('addCustomBtn').addEventListener('click', () => {
-      const name = document.getElementById('customName').value.trim();
-      const kcal = parseInt(document.getElementById('customKcal').value, 10);
-      if (!name || isNaN(kcal)) return;
-      const day = ensureDay(activeDateKey);
-      if (!day.extras) day.extras = [];
-      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      day.extras.push({ name, kcal, pro: Math.round(kcal * 0.03), time: timeStr });
-      document.getElementById('customName').value = '';
-      document.getElementById('customKcal').value = '';
-      closeSwapModal();
-      saveStore();
-    });
-
-    // Initial Render
     renderAll();
   </script>
 </body>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  
+  <!-- iOS Standalone App Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="CutOS" />
+  <meta name="theme-color" content="#09090b" />
+
+  <!-- Custom App Icon for iPhone Home Screen -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%2309090b'/><circle cx='90' cy='90' r='62' fill='none' stroke='%2310b981' stroke-width='14' stroke-dasharray='310 390' stroke-linecap='round'/><text x='50%' y='56%' dominant-baseline='middle' text-anchor='middle' font-size='56'>⚡</text></svg>" />
+
+  <title>CutOS — iPhone Diet Assistant</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --sat: env(safe-area-inset-top, 20px);
+      --sab: env(safe-area-inset-bottom, 20px);
+    }
+    body {
+      background-color: #09090b;
+      color: #fafafa;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      padding-top: calc(var(--sat) + 12px);
+      padding-bottom: calc(var(--sab) + 92px);
+    }
+    .ios-card {
+      background: rgba(24, 24, 27, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .ios-tabbar {
+      background: rgba(15, 15, 18, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: calc(var(--sab) + 6px);
+    }
+  </style>
+</head>
+<body class="max-w-md mx-auto px-4 min-h-screen">
+
+  <!-- Header & Day Selector -->
+  <header class="flex items-center justify-between mb-4">
+    <div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold uppercase tracking-widest text-emerald-400">CutOS iPhone</span>
+        <span id="streakBadge" class="text-[11px] bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded-full font-medium">1d streak</span>
+      </div>
+      <h1 id="currentDateLabel" class="text-xl font-bold tracking-tight">Today</h1>
+    </div>
+    <button onclick="resetDay()" class="text-xs text-zinc-400 bg-zinc-800/80 active:bg-zinc-700 px-3 py-1.5 rounded-full">
+      Reset Day
+    </button>
+  </header>
+
+  <!-- 7-Day Strip -->
+  <div id="dayStrip" class="grid grid-cols-7 gap-1.5 mb-4"></div>
+
+  <!-- Smart AI Assistant Banner -->
+  <div id="aiBanner" class="ios-card rounded-2xl p-3.5 mb-4 border-l-4 border-l-emerald-500">
+    <div class="flex items-start gap-2.5">
+      <span class="text-lg">🧠</span>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Live Assistant</p>
+        <p id="aiMessage" class="text-xs text-zinc-300 leading-relaxed mt-0.5"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calorie & Macro Dashboard -->
+  <div class="ios-card rounded-3xl p-4 mb-5">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <span class="text-xs text-zinc-400">Consumed / 1,650 kcal Target</span>
+        <div class="flex items-baseline gap-1.5 mt-0.5">
+          <span id="kcalConsumed" class="text-3xl font-extrabold tracking-tight">0</span>
+          <span class="text-xs text-zinc-400">kcal</span>
+        </div>
+      </div>
+      <div class="text-right">
+        <span class="text-xs text-zinc-400">Remaining</span>
+        <div id="kcalRemaining" class="text-xl font-bold text-emerald-400">1,650</div>
+      </div>
+    </div>
+    <div class="w-full h-2.5 bg-zinc-800 rounded-full overflow-hidden mb-3">
+      <div id="kcalBar" class="h-full bg-emerald-500 transition-all duration-300" style="width: 0%"></div>
+    </div>
+    <div class="grid grid-cols-3 gap-2 text-center text-xs">
+      <div class="bg-zinc-900/80 rounded-xl py-2">
+        <span class="text-zinc-400 block text-[10px]">PROTEIN</span>
+        <span id="proTotal" class="font-bold text-emerald-300">0g</span> <span class="text-zinc-500">/ 105g</span>
+      </div>
+      <div class="bg-zinc-900/80 rounded-xl py-2">
+        <span class="text-zinc-400 block text-[10px]">WATER</span>
+        <span id="waterSummary" class="font-bold text-sky-400">0.0L</span> <span class="text-zinc-500">/ 2.5L</span>
+      </div>
+      <div class="bg-zinc-900/80 rounded-xl py-2">
+        <span class="text-zinc-400 block text-[10px]">CAFFEINE</span>
+        <span id="caffeineSummary" class="font-bold text-amber-400">0</span> <span class="text-zinc-500">cups</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: MEALS VIEW -->
+  <section id="view-meals" class="space-y-3">
+    <div id="mealsContainer" class="space-y-3"></div>
+  </section>
+
+  <!-- TAB 2: WATER & CHIA VIEW -->
+  <section id="view-water" class="hidden space-y-4">
+    <div class="ios-card rounded-3xl p-4">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h2 class="font-bold text-base">Campus Chia Seed Bottle</h2>
+          <p class="text-xs text-zinc-400">1 tbsp soaked chia seeds in 500ml water</p>
+        </div>
+        <button id="chiaBtn" onclick="toggleChia()" class="px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 text-zinc-300">
+          Log (+60 kcal)
+        </button>
+      </div>
+    </div>
+
+    <div class="ios-card rounded-3xl p-4">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="font-bold text-base">Daily Hydration (250ml / glass)</h2>
+        <span id="waterCountLabel" class="text-xs font-semibold text-sky-400">0 / 10 glasses</span>
+      </div>
+      <div id="waterGrid" class="grid grid-cols-5 gap-2.5"></div>
+    </div>
+  </section>
+
+  <!-- TAB 3: COFFEE & CHA VIEW -->
+  <section id="view-caffeine" class="hidden space-y-4">
+    <div class="ios-card rounded-3xl p-4">
+      <h2 class="font-bold text-base mb-1">Tap to Log Drink & Timestamp</h2>
+      <p class="text-xs text-zinc-400 mb-3">Tracks hidden sugar calories and late-night sleep impact</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="logDrink('Black Coffee', 5, 0)" class="p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
+          <div class="text-sm font-bold">☕ Black Coffee</div>
+          <div class="text-[11px] text-emerald-400">5 kcal • Clean focus</div>
+        </button>
+        <button onclick="logDrink('Room Milk Coffee', 40, 2)" class="p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
+          <div class="text-sm font-bold">🥛 Real Milk Coffee</div>
+          <div class="text-[11px] text-emerald-400">40 kcal • No sugar</div>
+        </button>
+        <button onclick="logDrink('Coffee-mate + Sugar', 95, 0)" class="p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
+          <div class="text-sm font-bold">🥄 Coffee-mate Mix</div>
+          <div class="text-[11px] text-amber-400">95 kcal • Sugar/Oil</div>
+        </button>
+        <button onclick="logDrink('Campus Dudh Cha', 130, 2)" class="p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
+          <div class="text-sm font-bold">🧋 Campus Dudh Cha</div>
+          <div class="text-[11px] text-rose-400">130 kcal • Condensed milk</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="ios-card rounded-3xl p-4">
+      <h3 class="font-bold text-sm mb-2.5">Today's Drink Timeline</h3>
+      <div id="drinkTimeline" class="space-y-2 text-xs"></div>
+    </div>
+  </section>
+
+  <!-- Swap / Ate Something Else Modal -->
+  <div id="swapModal" class="fixed inset-0 bg-black/75 z-50 hidden flex items-end justify-center">
+    <div class="ios-card w-full max-w-md rounded-t-3xl p-5 space-y-3 border-t border-zinc-700">
+      <div class="flex justify-between items-center">
+        <h3 id="modalTitle" class="font-bold text-base">Swap or Log Cheat Food</h3>
+        <button onclick="closeSwapModal()" class="text-xs text-zinc-400 px-2 py-1">Close</button>
+      </div>
+      <p class="text-xs text-zinc-400">Select what you ate instead—your remaining calories and night mess meal will automatically adjust:</p>
+      <div id="presetList" class="grid grid-cols-2 gap-2 max-h-56 overflow-y-auto"></div>
+      <div class="pt-2 border-t border-zinc-800">
+        <p class="text-xs font-semibold mb-1.5 text-zinc-300">Or Custom Entry:</p>
+        <div class="flex gap-2">
+          <input id="customName" type="text" placeholder="Food name" class="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs" />
+          <input id="customKcal" type="number" placeholder="kcal" class="w-20 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs" />
+          <button onclick="applyCustomSwap()" class="bg-emerald-500 text-black font-bold px-3 py-2 rounded-xl text-xs">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- iOS Bottom Tab Bar -->
+  <nav class="ios-tabbar fixed bottom-0 left-0 right-0 max-w-md mx-auto px-6 pt-2 flex justify-around items-center z-40">
+    <button onclick="switchTab('meals')" id="tab-meals" class="flex flex-col items-center gap-0.5 text-emerald-400">
+      <span class="text-lg">🍱</span>
+      <span class="text-[10px] font-semibold">Routine</span>
+    </button>
+    <button onclick="switchTab('water')" id="tab-water" class="flex flex-col items-center gap-0.5 text-zinc-400">
+      <span class="text-lg">💧</span>
+      <span class="text-[10px] font-semibold">Water & Chia</span>
+    </button>
+    <button onclick="switchTab('caffeine')" id="tab-caffeine" class="flex flex-col items-center gap-0.5 text-zinc-400">
+      <span class="text-lg">☕</span>
+      <span class="text-[10px] font-semibold">Coffee & Cha</span>
+    </button>
+  </nav>
+
+  <script>
+    const TARGET_KCAL = 1650;
+    const DEFAULT_SLOTS = [
+      { id: 'breakfast', time: '8:00 AM • Before Uni', title: 'Oats + Milk + Yogurt + 1 Egg (or 2 Eggs + 2 Bread)', kcal: 380, pro: 21 },
+      { id: 'snack1', time: '11:30 AM • Campus Break', title: '1 Large Guava with Bit Lobon', kcal: 70, pro: 2 },
+      { id: 'lunch', time: '2:00 PM • Mess Lunch', title: '1.25 Cup Rice + Mess Egg Curry + 1 Extra Boiled Egg + Dal', kcal: 520, pro: 26 },
+      { id: 'snack2', time: '5:30 PM • Evening Fuel', title: '1 Boiled Egg + 3 tbsp Sour Aarong Yogurt', kcal: 145, pro: 11 },
+      { id: 'dinner', time: '9:00 PM • Mess Dinner', title: '1 Cup Rice + Mess Chicken Curry + Dal + Yogurt', kcal: 535, pro: 35 }
+    ];
+
+    const SWAP_PRESETS = [
+      { name: 'Campus Khichuri', kcal: 580, pro: 14 },
+      { name: '2x Peyaju + 1x Alur Chop', kcal: 310, pro: 5 },
+      { name: '1x Singara + 1x Peyaju', kcal: 290, pro: 4 },
+      { name: 'Mess Failed: 3 Egg Scramble + 2 Bread', kcal: 420, pro: 24 },
+      { name: 'No-Rice Mess Chicken + Dal + Yogurt', kcal: 320, pro: 32 },
+      { name: 'Instant Noodles + 1 Egg', kcal: 430, pro: 12 },
+      { name: 'Skipped Slot Completely', kcal: 0, pro: 0 }
+    ];
+
+    let activeDateKey = new Date().toISOString().slice(0, 10);
+    let activeSlotIndex = null;
+    let store = JSON.parse(localStorage.getItem('cutos_iphone_v1') || '{}');
+
+    function ensureDay(dateKey) {
+      if (!store[dateKey]) {
+        store[dateKey] = {
+          meals: DEFAULT_SLOTS.map(s => ({ ...s, status: 'pending', actualTitle: s.title, actualKcal: s.kcal, actualPro: s.pro })),
+          water: 0,
+          chia: false,
+          drinks: []
+        };
+      }
+      return store[dateKey];
+    }
+
+    function saveStore() {
+      localStorage.setItem('cutos_iphone_v1', JSON.stringify(store));
+      renderAll();
+    }
+
+    function renderDayStrip() {
+      const strip = document.getElementById('dayStrip');
+      strip.innerHTML = '';
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        const dayName = d.toLocaleDateString('en-US', { weekday: 'narrow' });
+        const dayNum = d.getDate();
+        const isSelected = key === activeDateKey;
+        const btn = document.createElement('button');
+        btn.className = `py-2 rounded-2xl flex flex-col items-center text-xs ${isSelected ? 'bg-emerald-500 text-black font-bold' : 'ios-card text-zinc-400'}`;
+        btn.innerHTML = `<span class="text-[10px]">${dayName}</span><span>${dayNum}</span>`;
+        btn.onclick = () => { activeDateKey = key; renderAll(); };
+        strip.appendChild(btn);
+      }
+    }
+
+    function toggleMealDone(idx) {
+      const day = ensureDay(activeDateKey);
+      const m = day.meals[idx];
+      m.status = m.status === 'done' ? 'pending' : 'done';
+      saveStore();
+    }
+
+    function openSwapModal(idx) {
+      activeSlotIndex = idx;
+      const list = document.getElementById('presetList');
+      list.innerHTML = '';
+      SWAP_PRESETS.forEach(p => {
+        const btn = document.createElement('button');
+        btn.className = 'p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-left active:bg-zinc-800';
+        btn.innerHTML = `<div class="text-xs font-bold text-zinc-100">${p.name}</div><div class="text-[10px] text-emerald-400">${p.kcal} kcal • ${p.pro}g P</div>`;
+        btn.onclick = () => {
+          const day = ensureDay(activeDateKey);
+          day.meals[activeSlotIndex].actualTitle = p.name;
+          day.meals[activeSlotIndex].actualKcal = p.kcal;
+          day.meals[activeSlotIndex].actualPro = p.pro;
+          day.meals[activeSlotIndex].status = 'swapped';
+          closeSwapModal();
+          saveStore();
+        };
+        list.appendChild(btn);
+      });
+      document.getElementById('swapModal').classList.remove('hidden');
+    }
+
+    function applyCustomSwap() {
+      const name = document.getElementById('customName').value.trim();
+      const kcal = parseInt(document.getElementById('customKcal').value, 10);
+      if (!name || isNaN(kcal)) return;
+      const day = ensureDay(activeDateKey);
+      day.meals[activeSlotIndex].actualTitle = name;
+      day.meals[activeSlotIndex].actualKcal = kcal;
+      day.meals[activeSlotIndex].actualPro = Math.round(kcal * 0.04);
+      day.meals[activeSlotIndex].status = 'swapped';
+      document.getElementById('customName').value = '';
+      document.getElementById('customKcal').value = '';
+      closeSwapModal();
+      saveStore();
+    }
+
+    function closeSwapModal() {
+      document.getElementById('swapModal').classList.add('hidden');
+    }
+
+    function toggleChia() {
+      const day = ensureDay(activeDateKey);
+      day.chia = !day.chia;
+      saveStore();
+    }
+
+    function logDrink(name, kcal, pro) {
+      const day = ensureDay(activeDateKey);
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      day.drinks.unshift({ name, kcal, pro, time: timeStr, hour: now.getHours() });
+      saveStore();
+    }
+
+    function removeDrink(index) {
+      const day = ensureDay(activeDateKey);
+      day.drinks.splice(index, 1);
+      saveStore();
+    }
+
+    function resetDay() {
+      delete store[activeDateKey];
+      saveStore();
+    }
+
+    function switchTab(tab) {
+      ['meals', 'water', 'caffeine'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.toggle('hidden', t !== tab); document.getElementById(`tab-${t}`).className = `flex flex-col items-center gap-0.5 ${t === tab ? 'text-emerald-400' : 'text-zinc-400'}`; }); }  function renderAll() { renderDayStrip(); const day = ensureDay(activeDateKey);  let kcal = day.chia ? 60 : 0; let pro = day.chia ? 2 : 0;  day.meals.forEach(m => { if (m.status === 'done' \vert{}\vert{} m.status === 'swapped') { kcal += m.actualKcal; pro += m.actualPro; } });  day.drinks.forEach(d => { kcal += d.kcal; pro += d.pro; });  const rem = TARGET_KCAL - kcal; document.getElementById('kcalConsumed').textContent = kcal; document.getElementById('kcalRemaining').textContent = rem >= 0 ? rem : `${Math.abs(rem)} over`;
+      document.getElementById('kcalRemaining').className = `text-xl font-bold ${rem >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+      document.getElementById('kcalBar').style.width = `${Math.min(100, (kcal / TARGET_KCAL) * 100)}\%`; document.getElementById('proTotal').textContent = `${pro}g`;
+      document.getElementById('waterSummary').textContent = `${(day.water * 0.25).toFixed(2)}L`; document.getElementById('caffeineSummary').textContent = day.drinks.length;  // Smart Assistant Logic const aiMsg = document.getElementById('aiMessage'); const hadCampusCheat = day.meals.some(m => m.status === 'swapped' && m.actualKcal >= 280); const dinnerSlot = day.meals[4];  if (day.meals[0].status === 'pending') { aiMsg.textContent = "Don't leave for campus on an empty stomach! Eat your Oats or 2 Eggs first so you don't crave peyaju & alur chop at 12 PM."; } else if (hadCampusCheat && dinnerSlot.status === 'pending') { aiMsg.textContent = "You logged heavier campus food earlier. Tap 'Swap' on Mess Dinner and pick 'No-Rice Mess Chicken + Dal + Yogurt (320 kcal)' to stay inside your fat-loss deficit!"; } else if (rem < 0) { aiMsg.textContent = `You're ${Math.abs(rem)} kcal over target today. Take a 20-minute evening walk and stick to black coffee tomorrow.`;
+      } else {
+        aiMsg.textContent = `Right on track with ${rem} kcal remaining. Keep sipping water between lectures.`;
+      }
+
+      // Render Meals
+      const mc = document.getElementById('mealsContainer');
+      mc.innerHTML = '';
+      day.meals.forEach((m, idx) => {
+        const isLogged = m.status === 'done' || m.status === 'swapped';
+        const card = document.createElement('div');
+        card.className = `ios-card rounded-2xl p-3.5 transition-all ${isLogged ? 'border-emerald-500/40 bg-emerald-950/10' : ''}`;
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-1.5">
+            <span class="text-[11px] font-semibold text-zinc-400">${

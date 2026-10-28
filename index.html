@@ -7,10 +7,10 @@
   <!-- iOS Standalone App Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="CutOS" />
+  <meta name="apple-mobile-web-app-title" content="CutOS Master" />
   <meta name="theme-color" content="#09090b" />
 
-  <title>CutOS — iPhone Diet Assistant</title>
+  <title>CutOS Master — Strict Diet Trainer</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
@@ -47,8 +47,8 @@
   <header class="flex items-center justify-between mb-4">
     <div>
       <div class="flex items-center gap-2">
-        <span class="text-xs font-semibold uppercase tracking-widest text-emerald-400">CutOS iPhone</span>
-        <span id="streakBadge" class="text-[11px] bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded-full font-medium">Active</span>
+        <span class="text-xs font-semibold uppercase tracking-widest text-rose-400">CutOS Master Trainer</span>
+        <span id="streakBadge" class="text-[11px] bg-rose-500/15 text-rose-300 px-2 py-0.5 rounded-full font-medium">Strict Mode</span>
       </div>
       <h1 id="currentDateLabel" class="text-xl font-bold tracking-tight">Today's Routine</h1>
     </div>
@@ -60,13 +60,13 @@
   <!-- 7-Day Strip -->
   <div id="dayStrip" class="grid grid-cols-7 gap-1.5 mb-4"></div>
 
-  <!-- Smart AI Assistant Banner -->
-  <div id="aiBanner" class="ios-card rounded-2xl p-3.5 mb-4 border-l-4 border-l-emerald-500">
+  <!-- Strict Master Trainer AI Banner -->
+  <div id="aiBanner" class="ios-card rounded-2xl p-3.5 mb-4 border-l-4 border-l-rose-500 bg-rose-950/20">
     <div class="flex items-start gap-2.5">
-      <span class="text-lg">🧠</span>
+      <span class="text-lg">🚨</span>
       <div>
-        <p class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Live Assistant</p>
-        <p id="aiMessage" class="text-xs text-zinc-300 leading-relaxed mt-0.5">Loading assistant...</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-rose-400">Master Trainer Warning</p>
+        <p id="aiMessage" class="text-xs text-zinc-200 leading-relaxed mt-0.5">Analyzing your timeline and habits...</p>
       </div>
     </div>
   </div>
@@ -137,7 +137,7 @@
   <section id="view-caffeine" class="hidden space-y-4">
     <div class="ios-card rounded-3xl p-4">
       <h2 class="font-bold text-base mb-1">Tap to Log Drink & Timestamp</h2>
-      <p class="text-xs text-zinc-400 mb-3">Tracks hidden sugar calories and late-night sleep impact</p>
+      <p class="text-xs text-zinc-400 mb-3">Trainer locks coffee after 6:00 PM to protect sleep & fat loss</p>
       <div class="grid grid-cols-2 gap-2" id="drinkButtonsContainer">
         <button data-drink="Black Coffee" data-kcal="5" data-pro="0" class="drink-btn p-3 rounded-2xl bg-zinc-900 active:bg-zinc-800 text-left border border-zinc-800">
           <div class="text-sm font-bold pointer-events-none">☕ Black Coffee</div>
@@ -164,23 +164,26 @@
     </div>
   </section>
 
-  <!-- Swap / Ate Something Else Modal -->
+  <!-- Swap / Custom Extra Snack Modal -->
   <div id="swapModal" class="fixed inset-0 bg-black/75 z-50 hidden flex items-end justify-center">
-    <div class="ios-card w-full max-w-md rounded-t-3xl p-5 space-y-3 border-t border-zinc-700">
+    <div class="ios-card w-full max-w-md rounded-t-3xl p-5 space-y-3 border-t border-zinc-700 max-h-[85vh] overflow-y-auto">
       <div class="flex justify-between items-center">
-        <h3 id="modalTitle" class="font-bold text-base">Swap or Log Cheat Food</h3>
+        <h3 id="modalTitle" class="font-bold text-base">Swap Slot or Add Extra Snack</h3>
         <button id="closeModalBtn" class="text-xs text-zinc-400 px-2 py-1">Close</button>
       </div>
-      <p class="text-xs text-zinc-400">Select what you ate instead—your remaining calories and night mess meal will automatically adjust:</p>
-      <div id="presetList" class="grid grid-cols-2 gap-2 max-h-56 overflow-y-auto"></div>
-      <div class="pt-2 border-t border-zinc-800">
-        <p class="text-xs font-semibold mb-1.5 text-zinc-300">Or Custom Entry:</p>
+      
+      <!-- Custom Extra Entry (e.g. afternoon cake) -->
+      <div class="bg-zinc-900 p-3 rounded-2xl border border-zinc-800 space-y-2">
+        <p class="text-xs font-bold text-emerald-400">🍰 Ate Something Extra (Cake, Burger, Sweets)?</p>
         <div class="flex gap-2">
-          <input id="customName" type="text" placeholder="Food name" class="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white" />
-          <input id="customKcal" type="number" placeholder="kcal" class="w-20 bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white" />
+          <input id="customName" type="text" placeholder="e.g. Chocolate Cake / Pastry" class="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white" />
+          <input id="customKcal" type="number" placeholder="kcal" class="w-20 bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white" />
           <button id="addCustomBtn" class="bg-emerald-500 text-black font-bold px-3 py-2 rounded-xl text-xs">Add</button>
         </div>
       </div>
+
+      <p class="text-xs text-zinc-400 pt-1">Or select a preset swap:</p>
+      <div id="presetList" class="grid grid-cols-2 gap-2"></div>
     </div>
   </div>
 
@@ -203,11 +206,11 @@
   <script>
     const TARGET_KCAL = 1650;
     const DEFAULT_SLOTS = [
-      { id: 'breakfast', time: '8:00 AM • Before Uni', title: 'Oats + Milk + Yogurt + 1 Egg (or 2 Eggs + 2 Bread)', kcal: 380, pro: 21 },
-      { id: 'snack1', time: '11:30 AM • Campus Break', title: '1 Large Guava with Bit Lobon', kcal: 70, pro: 2 },
-      { id: 'lunch', time: '2:00 PM • Mess Lunch', title: '1.25 Cup Rice + Mess Egg Curry + 1 Extra Boiled Egg + Dal', kcal: 520, pro: 26 },
-      { id: 'snack2', time: '5:30 PM • Evening Fuel', title: '1 Boiled Egg + 3 tbsp Sour Aarong Yogurt', kcal: 145, pro: 11 },
-      { id: 'dinner', time: '9:00 PM • Mess Dinner', title: '1 Cup Rice + Mess Chicken Curry + Dal + Yogurt', kcal: 535, pro: 35 }
+      { id: 'breakfast', time: '8:00 AM • Before Uni', title: 'Oats + Milk + Yogurt + 1 Egg (or 2 Eggs + 2 Bread)', kcal: 380, pro: 21, hourLimit: 11 },
+      { id: 'snack1', time: '11:30 AM • Campus Break', title: '1 Large Guava with Bit Lobon', kcal: 70, pro: 2, hourLimit: 14 },
+      { id: 'lunch', time: '2:00 PM • Mess Lunch', title: '1.25 Cup Rice + Mess Egg Curry + 1 Extra Boiled Egg + Dal', kcal: 520, pro: 26, hourLimit: 16 },
+      { id: 'snack2', time: '5:30 PM • Evening Fuel', title: '1 Boiled Egg + 3 tbsp Sour Aarong Yogurt', kcal: 145, pro: 11, hourLimit: 20 },
+      { id: 'dinner', time: '9:00 PM • Mess Dinner', title: '1 Cup Rice + Mess Chicken Curry + Dal + Yogurt', kcal: 535, pro: 35, hourLimit: 22 }
     ];
 
     const SWAP_PRESETS = [
@@ -222,22 +225,23 @@
 
     let activeDateKey = new Date().toISOString().slice(0, 10);
     let activeSlotIndex = null;
-    let store = JSON.parse(localStorage.getItem('cutos_iphone_v1') || '{}');
+    let store = JSON.parse(localStorage.getItem('cutos_master_v1') || '{}');
 
     function ensureDay(dateKey) {
       if (!store[dateKey]) {
         store[dateKey] = {
-          meals: DEFAULT_SLOTS.map(s => ({ ...s, status: 'pending', actualTitle: s.title, actualKcal: s.kcal, actualPro: s.pro })),
+          meals: DEFAULT_SLOTS.map(s => ({ ...s, status: 'pending', actualTitle: s.title, actualKcal: s.kcal, actualPro: s.pro, loggedTime: null })),
           water: 0,
           chia: false,
-          drinks: []
+          drinks: [],
+          extras: [] // Extra items like afternoon cake
         };
       }
       return store[dateKey];
     }
 
     function saveStore() {
-      localStorage.setItem('cutos_iphone_v1', JSON.stringify(store));
+      localStorage.setItem('cutos_master_v1', JSON.stringify(store));
       renderAll();
     }
 
@@ -252,7 +256,7 @@
         const dayNum = d.getDate();
         const isSelected = key === activeDateKey;
         const btn = document.createElement('button');
-        btn.className = `py-2 rounded-2xl flex flex-col items-center text-xs ${isSelected ? 'bg-emerald-500 text-black font-bold' : 'ios-card text-zinc-400'}`;
+        btn.className = `py-2 rounded-2xl flex flex-col items-center text-xs ${isSelected ? 'bg-rose-500 text-white font-bold' : 'ios-card text-zinc-400'}`;
         btn.innerHTML = `<span class="text-[10px]">${dayName}</span><span>${dayNum}</span>`;
         btn.onclick = () => { activeDateKey = key; renderAll(); };
         strip.appendChild(btn);
@@ -265,7 +269,7 @@
       });
       document.querySelectorAll('.nav-tab').forEach(btn => {
         const isMatch = btn.getAttribute('data-tab') === tabName;
-        btn.className = `nav-tab flex flex-col items-center gap-0.5 ${isMatch ? 'text-emerald-400' : 'text-zinc-400'}`;
+        btn.className = `nav-tab flex flex-col items-center gap-0.5 ${isMatch ? 'text-rose-400' : 'text-zinc-400'}`;
       });
     }
 
@@ -275,7 +279,7 @@
       list.innerHTML = '';
       SWAP_PRESETS.forEach(p => {
         const btn = document.createElement('button');
-        btn.className = 'p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-left active:bg-zinc-800';
+        btn.className = 'p-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-left active:bg-zinc-900';
         btn.innerHTML = `<div class="text-xs font-bold text-zinc-100">${p.name}</div><div class="text-[10px] text-emerald-400">${p.kcal} kcal • ${p.pro}g P</div>`;
         btn.onclick = () => {
           const day = ensureDay(activeDateKey);
@@ -283,6 +287,7 @@
           day.meals[activeSlotIndex].actualKcal = p.kcal;
           day.meals[activeSlotIndex].actualPro = p.pro;
           day.meals[activeSlotIndex].status = 'swapped';
+          day.meals[activeSlotIndex].loggedTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
           closeSwapModal();
           saveStore();
         };
@@ -298,6 +303,8 @@
     function renderAll() {
       renderDayStrip();
       const day = ensureDay(activeDateKey);
+      const nowHour = new Date().getHours();
+      const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
 
       let kcal = day.chia ? 60 : 0;
       let pro = day.chia ? 2 : 0;
@@ -314,6 +321,13 @@
         pro += d.pro;
       });
 
+      if (day.extras) {
+        day.extras.forEach(ex => {
+          kcal += ex.kcal;
+          pro += ex.pro;
+        });
+      }
+
       const rem = TARGET_KCAL - kcal;
       document.getElementById('kcalConsumed').textContent = kcal;
       document.getElementById('kcalRemaining').textContent = rem >= 0 ? rem : `${Math.abs(rem)} over`;
@@ -323,20 +337,40 @@
       document.getElementById('waterSummary').textContent = `${(day.water * 0.25).toFixed(2)}L`;
       document.getElementById('caffeineSummary').textContent = day.drinks.length;
 
-      // Smart Assistant Logic
+      // 🚨 MASTER TRAINER WARNING LOGIC 🚨
       const aiMsg = document.getElementById('aiMessage');
-      const hadCampusCheat = day.meals.some(m => m.status === 'swapped' && m.actualKcal >= 280);
-      const dinnerSlot = day.meals[4];
+      const lunchMeal = day.meals[2]; // Lunch slot
+      const dinnerMeal = day.meals[4]; // Dinner slot
+      let trainerWarning = "";
 
-      if (day.meals[0].status === 'pending') {
-        aiMsg.textContent = "Don't leave for campus on an empty stomach! Eat your Oats or 2 Eggs first so you don't crave peyaju & alur chop at 12 PM.";
-      } else if (hadCampusCheat && dinnerSlot.status === 'pending') {
-        aiMsg.textContent = "You logged heavier campus food earlier. Tap 'Swap' on Mess Dinner and pick 'No-Rice Mess Chicken + Dal + Yogurt (320 kcal)' to stay inside your deficit!";
-      } else if (rem < 0) {
-        aiMsg.textContent = `You're ${Math.abs(rem)} kcal over target today. Take a 20-minute evening walk and stick to black coffee tomorrow.`;
+      // Check if it's past 11:00 PM (23:00)
+      if (nowHour >= 23) {
+        trainerWarning = "🛑 STRICT TRAINER LOCK: It is past 11:00 PM! Kitchen is permanently closed. Do NOT eat anything or drink coffee. Drink water only.";
+      } 
+      // Check if lunch was eaten too late (e.g., after 4:00 PM / 16:00)
+      else if (lunchMeal.status !== 'pending' && lunchMeal.loggedTime) {
+        // Simple heuristic check
+        trainerWarning = `⚠️ Master Alert: Lunch was logged at ${lunchMeal.loggedTime}. Eating lunch too late pushes your digestion and fat-burn window. Keep dinner light!`;
+      } 
+      // Check if dinner / late eating violation
+      else if (dinnerMeal.status !== 'pending' && nowHour >= 23) {
+        trainerWarning = "🛑 CRITICAL VIOLATION: Eating dinner or heavy meals at 11 PM or later destroys fat loss. No more food tonight!";
+      } 
+      // Check late caffeine
+      else if (day.drinks.some(d => d.hour >= 18)) {
+        trainerWarning = "⚠️ Caffeine Warning: You logged coffee/tea after 6:00 PM. This spikes cortisol and ruins deep sleep. Cut caffeine earlier tomorrow.";
+      } 
+      // Extra food warning (like cake)
+      else if (day.extras && day.extras.length > 0) {
+        trainerWarning = `⚠️ Extra Snack Logged (+${day.extras.reduce((a,b)=>a+b.kcal,0)} kcal): Your trainer adjusted your deficit. No fried street food or sweets for the rest of the week!`;
+      } 
+      else if (day.meals[0].status === 'pending' && nowHour >= 10) {
+        trainerWarning = "🚨 MORNING WARNING: You left for university on an empty stomach past 10 AM! This causes severe cravings for peyaju and alur chop later. Eat your oats or eggs right now.";
       } else {
-        aiMsg.textContent = `Right on track with ${rem} kcal remaining. Keep sipping water between lectures.`;
+        trainerWarning = `Trainer Status: Clean discipline. ${rem} kcal remaining. Stay hydrated and avoid campus stalls!`;
       }
+
+      aiMsg.textContent = trainerWarning;
 
       // Render Meals
       const mc = document.getElementById('mealsContainer');
@@ -347,7 +381,7 @@
         card.className = `ios-card rounded-2xl p-3.5 transition-all ${isLogged ? 'border-emerald-500/40 bg-emerald-950/10' : ''}`;
         card.innerHTML = `
           <div class="flex justify-between items-start mb-1.5">
-            <span class="text-[11px] font-semibold text-zinc-400">${m.time}</span>
+            <span class="text-[11px] font-semibold text-zinc-400">${m.time} ${m.loggedTime ? '• logged at ' + m.loggedTime : ''}</span>
             <span class="text-xs font-bold ${m.status === 'swapped' ? 'text-amber-400' : 'text-emerald-400'}">${m.actualKcal} kcal • ${m.actualPro}g P</span>
           </div>
           <p class="text-sm font-semibold text-zinc-100 mb-3">${m.actualTitle}</p>
@@ -356,12 +390,31 @@
               ${isLogged ? '✓ Logged' : '✓ Ate Planned'}
             </button>
             <button data-action="swap" data-index="${idx}" class="px-3 py-2 rounded-xl text-xs font-semibold bg-zinc-900 border border-zinc-700 text-zinc-300">
-              ⇄ Swap / Cheat
+              ⇄ Swap / Custom Food
             </button>
           </div>
         `;
         mc.appendChild(card);
       });
+
+      // Render Extras (Cake / Unplanned snacks) if any
+      if (day.extras && day.extras.length > 0) {
+        const extraBox = document.createElement('div');
+        extraBox.className = 'ios-card rounded-2xl p-3.5 border-amber-500/40 bg-amber-950/10';
+        extraBox.innerHTML = `<h3 class="text-xs font-bold text-amber-400 mb-2">🍰 Unplanned Extra Items Logged Today:</h3>`;
+        day.extras.forEach((ex, exIdx) => {
+          extraBox.innerHTML += `
+            <div class="flex justify-between items-center text-xs bg-zinc-900 px-3 py-2 rounded-xl mb-1.5">
+              <span>${ex.name} (${ex.time})</span>
+              <div class="flex items-center gap-2">
+                <span class="text-amber-400 font-semibold">+${ex.kcal} kcal</span>
+                <button data-extra-remove="${exIdx}" class="text-zinc-500 px-1">✕</button>
+              </div>
+            </div>
+          `;
+        });
+        mc.appendChild(extraBox);
+      }
 
       // Render Water
       const chiaBtn = document.getElementById('chiaBtn');
@@ -390,7 +443,7 @@
             <div>
               <span class="font-semibold text-zinc-200">${d.name}</span>
               <span class="text-zinc-500 ml-1.5">${d.time}</span>
-              ${d.hour >= 18 ? '<span class="ml-1 text-[10px] text-amber-400">(Late caffeine)</span>' : ''}
+              ${d.hour >= 18 ? '<span class="ml-1 text-[10px] text-rose-400 font-bold">(Late caffeine violation)</span>' : ''}
             </div>
             <div class="flex items-center gap-2">
               <span class="text-emerald-400 font-semibold">+${d.kcal} kcal</span>
@@ -401,7 +454,7 @@
       }
     }
 
-    // Global Event Delegation for Dynamic Buttons
+    // Global Event Delegation
     document.addEventListener('click', (e) => {
       const target = e.target;
 
@@ -410,7 +463,13 @@
         const idx = parseInt(target.getAttribute('data-index'), 10);
         const day = ensureDay(activeDateKey);
         const m = day.meals[idx];
-        m.status = m.status === 'done' ? 'pending' : 'done';
+        if (m.status === 'done') {
+          m.status = 'pending';
+          m.loggedTime = null;
+        } else {
+          m.status = 'done';
+          m.loggedTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
         saveStore();
       }
       if (target.matches('[data-action="swap"]')) {
@@ -425,6 +484,14 @@
         day.drinks.splice(idx, 1);
         saveStore();
       }
+
+      // Extra Snack Remove Buttons
+      if (target.hasAttribute('data-extra-remove')) {
+        const idx = parseInt(target.getAttribute('data-extra-remove'), 10);
+        const day = ensureDay(activeDateKey);
+        day.extras.splice(idx, 1);
+        saveStore();
+      }
     });
 
     // Static Event Listeners
@@ -434,6 +501,11 @@
 
     document.querySelectorAll('.drink-btn').forEach(btn => {
       btn.addEventListener('click', () => {
+        const nowHour = new Date().getHours();
+        if (nowHour >= 23) {
+          alert("🛑 MASTER TRAINER LOCK: It is past 11 PM! Coffee is strictly prohibited right now.");
+          return;
+        }
         const name = btn.getAttribute('data-drink');
         const kcal = parseInt(btn.getAttribute('data-kcal'), 10);
         const pro = parseInt(btn.getAttribute('data-pro'), 10);
@@ -458,15 +530,15 @@
 
     document.getElementById('closeModalBtn').addEventListener('click', closeSwapModal);
 
+    // Custom Extra Item (e.g. afternoon cake)
     document.getElementById('addCustomBtn').addEventListener('click', () => {
       const name = document.getElementById('customName').value.trim();
       const kcal = parseInt(document.getElementById('customKcal').value, 10);
       if (!name || isNaN(kcal)) return;
       const day = ensureDay(activeDateKey);
-      day.meals[activeSlotIndex].actualTitle = name;
-      day.meals[activeSlotIndex].actualKcal = kcal;
-      day.meals[activeSlotIndex].actualPro = Math.round(kcal * 0.04);
-      day.meals[activeSlotIndex].status = 'swapped';
+      if (!day.extras) day.extras = [];
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      day.extras.push({ name, kcal, pro: Math.round(kcal * 0.03), time: timeStr });
       document.getElementById('customName').value = '';
       document.getElementById('customKcal').value = '';
       closeSwapModal();

@@ -133,22 +133,27 @@ if(late>=2){say(d,'warn',`⚠️ ${nm} at ${tm()}, planned ${esc(s.time)}. ${lat
 if(sk.length){say(d,'warn',`⚠️ You skipped the ${esc(sk[0].time)} slot and ate this instead. Skip then catch up is how you overshoot. Do not stack meals.`);return}}
 say(d,'tip',`✓ ${nm} logged on time. `+nextTip(d));return}
 say(d,'warn',`⚠️ Unplanned ${nm} (+${kcal} kcal). ${rem} kcal left. Skip the next snack to cover it. ${nextTip(d)}`)}
-function drinkSay(d,x){const b=toBed(d),c=d.drinks.length,n=esc(x[0]);
-if(b<=3)say(d,'angry',`😡 ${n} at ${tm()} with bedtime in ${b.toFixed(1)}h?! Caffeine stays in your system about 6 hours. You are choosing a ruined night. Water only from now.`);
+function drinkSay(d,x){const S=ST.s,h=new Date().getHours(),b=toBed(d),c=d.drinks.length,n=esc(x[0]);
+const lateBefore=d.drinks.slice(1).some(y=>y.h>=S.cut||y.h<4);
+if(h>=S.lock||h<4)say(d,'angry',`😡 ${n} at ${tm()}?! Caffeine this late wrecks your sleep and your cut. Logged honestly, now stop. Water only.`);
+else if(b<=3)say(d,'angry',`😡 ${n} at ${tm()} with bedtime in ${b.toFixed(1)}h?! Caffeine stays in your system about 6 hours. You are choosing a ruined night. Water only from now.`);
+else if(h>=S.cut&&lateBefore)say(d,'angry',`😡 Another caffeine drink after ${hr(S.cut)}. You already had one this evening. Do not stack it. Water only from here.`);
 else if(b<=6)say(d,'warn',`⚠️ ${n} ${b.toFixed(1)}h before bed. Caffeine will cut your deep sleep. Cut it off here.`);
+else if(h>=S.cut)say(d,'warn',`⚠️ ${n} after ${hr(S.cut)}. Caffeine lingers for hours. Make this the last one and do not have another.`);
 else if(x[0]=='Coke')say(d,'warn','⚠️ Coke is 140 kcal of sugar. Coke Zero gives the same hit for about 0.');
 else if(x[0]=='Coke Zero')say(d,'tip','🥤 Coke Zero is acceptable for a craving. Water first next time.');
 else if(x[1]>=95)say(d,'warn',`⚠️ ${n}: ${x[1]} kcal, mostly sugar. Black coffee costs 5.`);
 else if(c>=3)say(d,'warn',`⚠️ Cup ${c} today. Switch to water.`);
-else say(d,'tip',`☕ ${n} logged. Cup ${c} today.`)}
+else say(d,'tip',`☕ ${n} logged. Cup ${c} today. Nothing after ${hr(S.cut)}.`)}
 function live(d,t){const S=ST.s,rem=S.kcal-t.k;
 if(key!=lk(new Date()))return{l:'tip',x:'Past day. The coach reacts live on today only.'};
 const h=new Date().getHours(),n=nowH(),gl=Math.round(S.waterL*1000/S.glass);
-if(h>=S.lock||h<4)return{l:'angry',x:`🛑 Kitchen closed. ${h<4?'It is past midnight. ':''}No food, no caffeine. Go to sleep.`};
+if(h>=S.lock||h<4)return{l:'angry',x:`🛑 Late night. ${h<4?'It is past midnight. ':''}Avoid food and caffeine now. Go to sleep.`};
 if(rem<0)return{l:'angry',x:`😡 ${-rem} kcal over target. Stop eating. Train or walk it off.`};
 const od=S.slots.map(o=>({o,p:slotH(o)})).filter(x=>x.p!=null&&n-x.p>=1.5&&!done(d,x.o));
 if(od.length){const g=n-od[0].p;return{l:'warn',x:g>5?`⚠️ ${esc(od[0].o.time)} slot not logged. Skipped or forgotten? Log it so the numbers stay honest.`:`⏰ ${esc(od[0].o.time)} slot is ${g.toFixed(1)}h overdue. Eat a small portion now instead of skipping, or you overeat later.`}}
 const b=toBed(d);if(d.drinks.length&&b<=6&&(n-(d.drinks[0].h+0)+24)%24<=6)return{l:'warn',x:`☕ Caffeine still active and bed is in ${b.toFixed(1)}h. No more tonight.`};
+if(h>=S.cut&&d.drinks.some(y=>y.h>=S.cut))return{l:'warn',x:`☕ You had caffeine after ${hr(S.cut)}. Do not have more tonight.`};
 if(h>=18&&t.p<S.pro*.6)return{l:'warn',x:`💪 Protein ${t.p}g of ${S.pro}g. Close the gap with eggs or yogurt.`};
 if(h>=15&&d.water<gl*.4)return{l:'warn',x:`💧 ${d.water} of ${gl} glasses. You are behind. Drink two now.`};
 const nx=nextTip(d);return{l:nx.startsWith('No more')?'ok':'tip',x:nx}}
@@ -171,7 +176,7 @@ let h=head('Hydrate',`${d.water} of ${gl} glasses · ${S.glass} ml each`)+strip(
 h+=`<div class="grp"><div class="row sp"><div><b>Chia bottle</b><div class="mut">1 tbsp soaked in 500 ml</div></div><button class="btn ${d.chia?'g':''}" data-a="chia">${d.chia?'✓ Logged':'Log +60 kcal'}</button></div></div>`;
 h+=`<div class="lbl">Glasses</div><div class="grp"><div class="wg">`;
 for(let i=1;i<=gl;i++)h+=`<button class="wb ${i<=d.water?'on':''}" data-a="w" data-v="${i}">💧<br>${i*S.glass}</button>`;
-h+=`</div></div><div class="lbl">Caffeine · flagged after ${hr(S.cut)}</div><div class="grp"><div class="dg">`+DRK.map((x,i)=>`<button class="dr" data-a="drink" data-v="${i}"><b>${x[0]}</b><span class="mut">${x[1]} kcal · ${x[3]}</span></button>`).join('')+'</div></div>';
+h+=`</div></div><div class="lbl">Caffeine · coach warns after ${hr(S.cut)}</div><div class="grp"><div class="dg">`+DRK.map((x,i)=>`<button class="dr" data-a="drink" data-v="${i}"><b>${x[0]}</b><span class="mut">${x[1]} kcal · ${x[3]}</span></button>`).join('')+'</div></div>';
 h+=`<div class="lbl">Drink timeline</div><div class="grp">`+(d.drinks.length?d.drinks.map((x,i)=>`<div class="row"><div class="fl"><b>${esc(x.name)}</b> <span class="mut">${x.time}</span>${x.h>=S.cut?' <b style="color:var(--r);font-size:11px">LATE</b>':''}</div><span class="mut">+${x.kcal}</span><button class="x" data-a="ddel" data-v="${i}">✕</button></div>`).join(''):'<div class="row mut">No caffeine logged.</div>')+'</div>';
 return h}
 function train(d){let h=head('Train',d.wo.type||'Pick a session')+strip();
@@ -191,7 +196,7 @@ h+=`<div class="lbl">Daily routine · ${dn}/${S.routine.length}</div><div class=
 return h}
 function nr(l,p,v,u){return`<div class="row sp"><span>${l}</span><span><input type="number" inputmode="decimal" step="any" data-f="${p}" data-n="1" value="${v}"> <span class="mut">${u}</span></span></div>`}
 function sets(){const S=ST.s;
-let h=head('Settings','Targets, meal plan, routine')+`<div class="lbl">Daily targets</div><div class="grp">${nr('Calories','s.kcal',S.kcal,'kcal')}${nr('Protein','s.pro',S.pro,'g')}${nr('Water goal','s.waterL',S.waterL,'L')}${nr('Glass size','s.glass',S.glass,'ml')}${nr('Sleep goal','s.sleep',S.sleep,'h')}${nr('Caffeine flag after','s.cut',S.cut,'24h')}${nr('Kitchen lock after','s.lock',S.lock,'24h')}</div>`;
+let h=head('Settings','Targets, meal plan, routine')+`<div class="lbl">Daily targets</div><div class="grp">${nr('Calories','s.kcal',S.kcal,'kcal')}${nr('Protein','s.pro',S.pro,'g')}${nr('Water goal','s.waterL',S.waterL,'L')}${nr('Glass size','s.glass',S.glass,'ml')}${nr('Sleep goal','s.sleep',S.sleep,'h')}${nr('Caffeine warning after','s.cut',S.cut,'24h')}${nr('Late-night warning after','s.lock',S.lock,'24h')}</div>`;
 h+=`<div class="lbl">Meal slots</div>`+S.slots.map(s=>`<div class="grp"><div class="row"><input style="width:92px" data-slot="${s.id}" data-k="time" value="${esc(s.time)}"><input class="fl" data-slot="${s.id}" data-k="title" value="${esc(s.title)}"></div><div class="row sp"><span><input type="number" data-slot="${s.id}" data-k="kcal" data-n="1" value="${s.kcal}"> <span class="mut">kcal</span></span><span><input type="number" data-slot="${s.id}" data-k="pro" data-n="1" value="${s.pro}"> <span class="mut">g</span></span><button class="btn d" data-a="sdel" data-v="${s.id}">Delete</button></div></div>`).join('');
 h+=`<button class="btn p" style="width:100%;margin-bottom:20px" data-a="sadd">Add meal slot</button>`;
 h+=`<div class="lbl">Routine checklist (one per line)</div><div class="grp"><div class="row"><textarea class="fl" rows="5" data-f="s.routine" data-lines="1">${esc(S.routine.join('\n'))}</textarea></div></div>`;
@@ -217,7 +222,7 @@ if(a=='xadd'){const q=$('#qf').value.trim();if(!q)return;const x=est(q);d.extras
 if(a=='xdel'){d.extras.splice(+v,1);return save()}
 if(a=='chia'){d.chia=!d.chia;return save()}
 if(a=='w'){d.water=d.water==+v?+v-1:+v;return save()}
-if(a=='drink'){if(key==lk(new Date())&&(new Date().getHours()>=S.lock||new Date().getHours()<4)){openSh('<p style="text-align:center;font-weight:600">🛑 Kitchen locked. No caffeine after '+hr(S.lock)+'.</p>');return}const x=DRK[+v];d.drinks.unshift({name:x[0],kcal:x[1],pro:x[2],time:tm(),h:new Date().getHours()});drinkSay(d,x);return save()}
+if(a=='drink'){const x=DRK[+v];d.drinks.unshift({name:x[0],kcal:x[1],pro:x[2],time:tm(),h:new Date().getHours()});drinkSay(d,x);return save()}
 if(a=='ddel'){d.drinks.splice(+v,1);return save()}
 if(a=='wot'){d.wo.type=d.wo.type==v?'':v;return save()}
 if(a=='exadd'){const n=$('#en').value.trim();if(!n)return;d.wo.items.push({n,s:+$('#es').value||0,r:+$('#er').value||0,w:+$('#ew').value||0});return save()}
